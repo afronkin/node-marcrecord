@@ -1,0 +1,23 @@
+{
+    "name": "marcrecord",
+    "description": "MARC record library for node.js",
+    "main": "./lib/marcrecord",
+    "author": "Alexander Fronkin",
+    "version": "0.0.1",
+    "repository" : {
+        "type" : "git",
+        "url" : "https://github.com/afronkin/marcrecord.git"
+    },
+    "bugs" : {
+        "url" : "https://github.com/afronkin/marcrecord/issues"
+    },
+    "licenses" : [
+        {
+            "type" : "BSD",
+            "url" : "https://github.com/afronkin/marcrecord/raw/master/LICENSE"
+        }
+    ],
+    "scripts": {
+        "test": "nodeunit share/test/test1.js"
+    }
+}
