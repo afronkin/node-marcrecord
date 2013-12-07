@@ -1,11 +1,13 @@
 var fs = require('fs');
+
 var marcrecord = require('../');
+var MarcRecord = marcrecord.MarcRecord;
 
 /*
  * Parse ISO2709 buffer of the record.
  */
 function parseRecord(recordBuffer) {
-  var record = new marcrecord.MarcRecord();
+  var record = new MarcRecord();
   record.parseIsoBuffer(recordBuffer);
   process.stdout.write('Leader: [' + record.leader + ']\n');
 }
