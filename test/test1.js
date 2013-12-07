@@ -1,4 +1,4 @@
-var marcrecord = require('../../packages/marcrecord');
+var marcrecord = require('../');
 
 // Create new record.
 process.stderr.write('Create new record: ');

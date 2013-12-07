@@ -1,5 +1,5 @@
 var fs = require('fs');
-var marcrecord = require('../../packages/marcrecord');
+var marcrecord = require('../');
 
 /*
  * Parse ISO2709 buffer of the record.
