@@ -102,37 +102,6 @@ if (record.size() === 2) {
   process.stderr.write('FAILED\n');
 }
 
-/*
- * Print content of the field.
- */
-function printField(field) {
-  if (field.isControlField()) {
-    process.stdout.write(field.tag);
-    if (field.data.length > 0) {
-      process.stdout.write(' ' + field.data);
-    }
-  } else if (field.isDataField()) {
-    process.stdout.write(field.tag + ' [' + field.ind1 + field.ind2 + ']');
-    for (var subfieldNo in field.subfields) {
-      var subfield = field.subfields[subfieldNo];
-
-      process.stdout.write(' $' + subfield.code);
-      if (!subfield.isEmbeddedField()) {
-        if (subfield.data.length > 0) {
-          process.stdout.write(' ' + subfield.data);
-        }
-      } else {
-        printField(subfield.data);
-      }
-    }
-  } else {
-    process.stdout.write('Error: unknown field type.');
-  }
-}
-
 // Print content of the record.
 process.stderr.write('\nContent of the record:\n');
-for (var fieldNo in record.fields) {
-  printField(record.fields[fieldNo]);
-  process.stdout.write('\n');
-}
+process.stdout.write(record.toString());

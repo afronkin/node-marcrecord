@@ -10,7 +10,7 @@ var marcrecord = require('../'),
 // Read a MARC record from the file.
 var record = new MarcRecord();
 var marcReader = new MarcIsoReader();
-marcReader.open('record_1.iso', 'utf-8', function(error) {
+marcReader.open('record_1.iso', 'cp1251', function(error) {
   if (error) {
     throw error;
   }
@@ -18,6 +18,9 @@ marcReader.open('record_1.iso', 'utf-8', function(error) {
     if (error) {
       throw error;
     }
-    process.stdout.write('Leader: [' + record.leader + ']\n');
+
+    // Print content of the record.
+    process.stderr.write('Content of the record:\n');
+    process.stdout.write(record.toString());
   });
 });
