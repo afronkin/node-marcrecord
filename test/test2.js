@@ -1,4 +1,4 @@
-/**
+/*
  * Module dependencies.
  */
 var fs = require('fs');
@@ -7,7 +7,7 @@ var marcrecord = require('../'),
     MarcRecord = marcrecord.MarcRecord,
     MarcIsoReader = marcrecord.MarcIsoReader;
 
-/**
+/*
  * Reads a MARC records from the file.
  */
 function readNextRecord() {
