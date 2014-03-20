@@ -1,14 +1,11 @@
-/*
- * Module dependencies.
- */
 var marcrecord = require('../');
-var MarcRecord = marcrecord.MarcRecord,
-  MarcControlField = marcrecord.MarcControlField,
-  MarcDataField = marcrecord.MarcDataField,
-  MarcSubfield = marcrecord.MarcSubfield;
+var MarcRecord = marcrecord.MarcRecord;
+var MarcControlField = marcrecord.MarcControlField;
+var MarcDataField = marcrecord.MarcDataField;
+var MarcSubfield = marcrecord.MarcSubfield;
 
 // Create new record.
-process.stderr.write('Create new record: ');
+process.stderr.write('Create the new record: ');
 var record = new MarcRecord();
 if (record.size() === 0) {
   process.stderr.write('OK\n');
@@ -17,7 +14,7 @@ if (record.size() === 0) {
 }
 
 // Create new control field.
-process.stderr.write('Create new control field: ');
+process.stderr.write('Create the new control field: ');
 var controlField = new MarcControlField('001', 'ID/1');
 if (controlField.tag === '001' && controlField.data === 'ID/1') {
   process.stderr.write('OK\n');
@@ -26,7 +23,7 @@ if (controlField.tag === '001' && controlField.data === 'ID/1') {
 }
 
 // Add control field to the record.
-process.stderr.write('Add control field to the record: ');
+process.stderr.write('Add the control field to the record: ');
 record.addVariableField(controlField);
 if (record.size() === 1) {
   process.stderr.write('OK\n');
@@ -35,7 +32,7 @@ if (record.size() === 1) {
 }
 
 // Create new data field.
-process.stderr.write('Create new data field: ');
+process.stderr.write('Create the new data field: ');
 var dataField = new MarcDataField('900', '1', '2');
 if (dataField.tag === '900' && dataField.ind1 == '1' && dataField.ind2 == '2'
     && dataField.size() === 0)
@@ -46,7 +43,7 @@ if (dataField.tag === '900' && dataField.ind1 == '1' && dataField.ind2 == '2'
 }
 
 // Add data field to the record.
-process.stderr.write('Add data field to the record: ');
+process.stderr.write('Add the data field to the record: ');
 record.addVariableField(dataField);
 if (record.size() === 2) {
   process.stderr.write('OK\n');
@@ -55,7 +52,7 @@ if (record.size() === 2) {
 }
 
 // Create new subfield.
-process.stderr.write('Create new subfield: ');
+process.stderr.write('Create the new subfield: ');
 var subfield = new MarcSubfield('a', 'Subfield data');
 if (subfield.code === 'a' && subfield.data === 'Subfield data') {
   process.stderr.write('OK\n');
@@ -64,7 +61,7 @@ if (subfield.code === 'a' && subfield.data === 'Subfield data') {
 }
 
 // Add subfield to the data field.
-process.stderr.write('Add subfield to the data field: ');
+process.stderr.write('Add the subfield to the data field: ');
 dataField.addSubfield(subfield);
 if (dataField.size() === 1) {
   process.stderr.write('OK\n');
@@ -73,7 +70,7 @@ if (dataField.size() === 1) {
 }
 
 // Create new embedded field.
-process.stderr.write('Create new embedded field: ');
+process.stderr.write('Create the new embedded field: ');
 var embeddedField = new MarcControlField('001', 'ID/2');
 var subfield = new MarcSubfield('1', embeddedField);
 if (subfield.code === '1' && subfield.data instanceof MarcControlField) {
@@ -83,7 +80,7 @@ if (subfield.code === '1' && subfield.data instanceof MarcControlField) {
 }
 
 // Add embedded field to the data field.
-process.stderr.write('Add embedded field to the data field: ');
+process.stderr.write('Add the embedded field to the data field: ');
 dataField.addSubfield(subfield);
 if (dataField.size() === 2) {
   process.stderr.write('OK\n');

@@ -1,6 +1,3 @@
-/*
- * Module dependencies.
- */
 var fs = require('fs');
 
 var marcrecord = require('../'),
@@ -16,16 +13,16 @@ function readNextRecord() {
       throw e;
     }
 
-    // End of file reached.
+    // End of the file reached.
     if (record === null) {
       return;
     }
 
-    // Print content of the record.
+    // Print the content of the record.
     process.stderr.write('Content of the record:\n');
     process.stdout.write(record.toString());
 
-    // Read next record after all I/O will be performed.
+    // Read the next record after all I/O will be performed.
     setTimeout(readNextRecord(), 0);
   });
 }
