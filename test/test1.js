@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 var marcrecord = require('../');
 var MarcRecord = marcrecord.MarcRecord;
 var MarcControlField = marcrecord.MarcControlField;
@@ -102,3 +104,15 @@ if (record.size() === 2) {
 // Print content of the record.
 process.stderr.write('\nContent of the record:\n');
 process.stdout.write(record.toString());
+
+// Writes the record to JSON file.
+fs.appendFile('record_1.json', JSON.stringify(record, null, 2),
+  function(err) {
+    process.stderr.write('Write the record to a JSON file: ');
+    if (err) {
+      process.stderr.write('FAILED\n');
+    } else {
+      process.stderr.write('OK\n');
+    }
+  }
+);
