@@ -101,12 +101,30 @@ if (record.size() === 2) {
   process.stderr.write('FAILED\n');
 }
 
+// Create the record copy.
+process.stderr.write('Create the record copy: ');
+var recordCopy = new MarcRecord(record);
+if (record.equals(recordCopy)) {
+  process.stderr.write('OK\n');
+} else {
+  process.stderr.write('FAILED\n');
+}
+
+// Create the record from JSON string.
+process.stderr.write('Create the record from JSON string: ');
+var recordCopy2 = new MarcRecord(JSON.stringify(record));
+if (record.equals(recordCopy2)) {
+  process.stderr.write('OK\n');
+} else {
+  process.stderr.write('FAILED\n');
+}
+
 // Print content of the record.
 process.stderr.write('\nContent of the record:\n');
-process.stdout.write(record.toString());
+process.stdout.write(record.toString() + '\n');
 
-// Writes the record to JSON file.
-fs.appendFile('record_1.json', JSON.stringify(record, null, 2),
+// Write the record to JSON file.
+fs.appendFile('records_1.json', JSON.stringify(record, null, 2),
   function(err) {
     process.stderr.write('Write the record to a JSON file: ');
     if (err) {

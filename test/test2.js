@@ -8,9 +8,9 @@ var marcrecord = require('../'),
  * Reads a MARC records from the file.
  */
 function readNextRecord() {
-  marcReader.next(function(e, record) {
-    if (e) {
-      throw e;
+  marcReader.next(function(err, record) {
+    if (err) {
+      throw err;
     }
 
     // End of the file reached.
@@ -19,7 +19,7 @@ function readNextRecord() {
     }
 
     // Print the content of the record.
-    process.stderr.write('Content of the record:\n');
+    process.stdout.write('Content of the record:\n');
     process.stdout.write(record.toString());
 
     // Read the next record after all I/O will be performed.
@@ -29,9 +29,9 @@ function readNextRecord() {
 
 // Read a MARC record from the file.
 var marcReader = new MarcIsoReader();
-marcReader.open('rusmarc_2.iso', 'cp1251', function(e) {
-  if (e) {
-    throw e;
+marcReader.open('records_2.iso', 'cp1251', function(err) {
+  if (err) {
+    throw err;
   }
   readNextRecord();
 });
