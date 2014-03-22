@@ -112,7 +112,7 @@ if (record.equals(recordCopy)) {
 
 // Create the record from JSON string.
 process.stderr.write('Create the record from JSON string: ');
-var recordCopy2 = new MarcRecord(JSON.stringify(record));
+var recordCopy2 = marcrecord.parse(JSON.parse(JSON.stringify(record)));
 if (record.equals(recordCopy2)) {
   process.stderr.write('OK\n');
 } else {

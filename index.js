@@ -10,4 +10,5 @@ exports.MarcControlField = field.MarcControlField;
 exports.MarcDataField = field.MarcDataField;
 exports.MarcSubfield = field.MarcSubfield;
 exports.MarcIsoReader = isoreader.MarcIsoReader;
-exports.MarcJsonReader = isoreader.MarcJsonReader;
+exports.MarcJsonReader = jsonreader.MarcJsonReader;
+exports.parse = jsonreader.parseRecord;
