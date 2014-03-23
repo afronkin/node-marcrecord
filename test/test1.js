@@ -101,6 +101,34 @@ if (record.size() === 2) {
   process.stderr.write('FAILED\n');
 }
 
+// Get control number.
+process.stderr.write('Get control number: ');
+var controlNumber = record.getControlNumber();
+if (controlNumber === 'ID/1') {
+  process.stderr.write('OK\n');
+} else {
+  process.stderr.write('FAILED\n');
+}
+
+// Get fields.
+process.stderr.write('Get fields: ');
+var fields = record.getVariableFields('001');
+if (fields.length === 1 && fields[0].tag === '001') {
+  process.stderr.write('OK\n');
+} else {
+  process.stderr.write('FAILED\n');
+}
+
+// Get subfields.
+process.stderr.write('Get subfields: ');
+var fields = record.getVariableFields('900');
+var subfields = fields.length > 0 ? fields[0].getSubfields('a') : [];
+if (subfields.length === 1 && subfields[0].code === 'a') {
+  process.stderr.write('OK\n');
+} else {
+  process.stderr.write('FAILED\n');
+}
+
 // Create the record copy.
 process.stderr.write('Create the record copy: ');
 var recordCopy = new MarcRecord(record);
