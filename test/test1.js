@@ -129,6 +129,16 @@ if (subfields.length === 1 && subfields[0].code === 'a') {
   process.stderr.write('FAILED\n');
 }
 
+// Get subfield data.
+process.stderr.write('Get subfield data: ');
+var fields = record.getVariableFields('900');
+var subfieldData = fields.length > 0 ? fields[0].getSubfieldData('a') : null;
+if (subfieldData === 'Subfield data') {
+  process.stderr.write('OK\n');
+} else {
+  process.stderr.write('FAILED\n');
+}
+
 // Create the record copy.
 process.stderr.write('Create the record copy: ');
 var recordCopy = new MarcRecord(record);
