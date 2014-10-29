@@ -13,4 +13,6 @@ exports.MarcSubfield = field.MarcSubfield;
 exports.MarcIsoReader = isoreader.MarcIsoReader;
 exports.MarcIsoWriter = isowriter.MarcIsoWriter;
 exports.MarcJsonReader = jsonreader.MarcJsonReader;
-exports.parse = jsonreader.parseRecord;
+exports.parse = exports.parseRecord = jsonreader.parseRecord;
+exports.parseField = jsonreader.parseField;
+exports.parseSubfield = jsonreader.parseSubfield;
