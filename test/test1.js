@@ -1,6 +1,11 @@
 var fs = require('fs');
 
-var marcrecord = require('../');
+try {
+  var marcrecord = require('marcrecord');
+} catch (err) {
+  var marcrecord = require('..');
+}
+
 var MarcRecord = marcrecord.MarcRecord;
 var MarcControlField = marcrecord.MarcControlField;
 var MarcDataField = marcrecord.MarcDataField;

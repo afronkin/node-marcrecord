@@ -1,5 +1,10 @@
 var async = require('async');
-var marcrecord = require('marcrecord');
+
+try {
+  var marcrecord = require('marcrecord');
+} catch (err) {
+  var marcrecord = require('..');
+}
 
 var MarcRecord = marcrecord.MarcRecord;
 var MarcIsoReader = marcrecord.MarcIsoReader;
