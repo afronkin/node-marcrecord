@@ -10,20 +10,42 @@ var MarcRecord = marcrecord.MarcRecord;
 var MarcIsoReader = marcrecord.MarcIsoReader;
 var MarcIsoWriter = marcrecord.MarcIsoWriter;
 
-// Open MARC file.
-var marcReader = new MarcIsoReader();
-marcReader.open('records_2.iso', 'cp1251', function(err) {
-  if (err) {
-    throw err;
-  }
+function writeRecords(fileName, callback) {
+  var data = require('./data');
 
   var marcWriter = new MarcIsoWriter();
-  marcWriter.open('records_3.iso', 'cp1251', function(err) {
+  marcWriter.open(fileName, {encoding: 'cp1251'}, function(err) {
     if (err) {
-      throw err;
+      return callback(err);
     }
 
-    // Read MARC records from the file.
+    async.eachSeries(data.records,
+      function(record, next) {
+        marcWriter.write(record, next);
+      },
+      function(err) {
+        if (err) {
+          return callback(err);
+        }
+
+        marcWriter.close(function(err) {
+          if (err) {
+            return callback(err);
+          }
+          callback();
+        });
+      }
+    );
+  });
+}
+
+function readRecords(fileName, callback) {
+  var marcReader = new MarcIsoReader();
+  marcReader.open(fileName, {encoding: 'cp1251'}, function(err) {
+    if (err) {
+      return callback(err);
+    }
+
     async.forever(
       function(next) {
         marcReader.next(function(err, record) {
@@ -31,18 +53,36 @@ marcReader.open('records_2.iso', 'cp1251', function(err) {
             return next(err || 'EOF');
           }
 
-          marcWriter.write(record, next);
+          console.log(record.toString());
+          next();
         });
       },
       function(err) {
-        marcReader.close(function() {
-          marcWriter.close(function() {
-            if (err && err !== 'EOF') {
-              console.error(err.message);
-            }
-          });
+        if (err && err !== 'EOF') {
+          return callback(err);
+        }
+
+        marcReader.close(function(err) {
+          if (err) {
+            return callback(err);
+          }
+          callback();
         });
       }
     );
+  });
+}
+
+writeRecords('records_2.iso', function(err) {
+  if (err) {
+    throw err;
+  }
+
+  readRecords('records_2.iso', function(err) {
+    if (err) {
+      throw err;
+    }
+
+    console.error('Done.');
   });
 });
