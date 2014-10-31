@@ -21,12 +21,21 @@ exports.records = [
       ])),
       new MarcSubfield('c', 'C'),
       new MarcSubfield('1', new MarcControlField('001', '2')),
-      new MarcSubfield('b', 'B')
+      new MarcSubfield('b', 'B'),
+      new MarcSubfield('1', new MarcDataField('905', '7', '8', [
+        new MarcSubfield('q', 'Q'),
+        new MarcSubfield('g', 'G')
+      ])),
     ]),
     new MarcDataField('900', '1', '2', [
      new MarcSubfield('c', 'C'),
        new MarcSubfield('a', 'A'),
       new MarcSubfield('b', 'B')
+    ]),
+    new MarcDataField('900', '3', '4', [
+     new MarcSubfield('z', 'Z'),
+       new MarcSubfield('x', 'X'),
+      new MarcSubfield('y', 'Y')
     ])
   ]),
   new MarcRecord([
