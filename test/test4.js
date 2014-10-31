@@ -27,22 +27,20 @@ var record = new MarcRecord([
   ]),
 ]);
 
-console.log('Fields after reordering:');
-record.sort();
-var fields = record.getVariableFields();
-for (var i = 0; i < fields.length; i++) {
-  console.log(fields[i].tag);
+console.log('Embedded fields:');
+var field = record.getVariableField('950');
+if (field) {
+  var embeddedFields = field.getVariableFields(['001', '905']);
+  for (var i = 0; i < embeddedFields.length; i++) {
+    console.log(embeddedFields[i].toString());
+  }
 }
 
-console.log('\nSubfields after reordering:');
+console.log('\nFirst embedded field:');
 var field = record.getVariableField('950');
-field.sort();
-var subfields = field.getSubfields();
-for (var i = 0; i < subfields.length; i++) {
-  var subfield = subfields[i];
-  if (subfield.isEmbeddedField()) {
-    console.log("%s <%s>", subfield.code, subfield.data.tag);
-  } else {
-    console.log(subfield.code);
+if (field) {
+  var embeddedField = field.getVariableFields('905');
+  if (embeddedField) {
+    console.log(embeddedField.toString());
   }
 }
