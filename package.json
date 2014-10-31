@@ -1,13 +1,16 @@
 {
   "name": "marcrecord",
   "description": "MARC record library (inspired by marc4j)",
-  "version": "0.0.1",
-  "author": "Alexander Fronkin <alexander@fronkin.ru>",
+  "version": "0.0.2",
+  "author": "Alexander Fronkin <alexander.fronkin@afronkin.net>",
   "repository": "https://github.com/afronkin/node-marcrecord.git",
   "main": "index",
   "scripts": {
-    "test1": "node share/test/test1.js",
-    "test2": "node share/test/test2.js"
+    "test1": "node test/test1.js",
+    "test2a": "node test/test2a.js",
+    "test2b": "node test/test2b.js",
+    "test3": "node test/test3.js",
+    "test4": "node test/test4.js"
   },
   "engines": {
     "node": ">= 0.8.0"
