@@ -3,7 +3,10 @@
   "description": "MARC record library (inspired by marc4j)",
   "version": "0.0.2",
   "author": "Alexander Fronkin <alexander.fronkin@afronkin.net>",
-  "repository": "https://github.com/afronkin/node-marcrecord.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/afronkin/node-marcrecord.git"
+  },
   "main": "index",
   "scripts": {
     "test1": "node test/test1.js",
@@ -14,5 +17,21 @@
   },
   "engines": {
     "node": ">= 0.8.0"
-  }
+  },
+  "dependencies": {
+    "iconv-lite": ">= 0.4.4"
+  },
+  "bugs": {
+    "url": "https://github.com/afronkin/node-marcrecord/issues"
+  },
+  "homepage": "https://github.com/afronkin/node-marcrecord",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "keywords": [
+    "MARC21",
+    "UNIMARC"
+  ],
+  "license": "BSD-2-Clause"
 }
