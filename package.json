@@ -9,11 +9,9 @@
   },
   "main": "index",
   "scripts": {
-    "test1": "node test/test1.js",
-    "test2a": "node test/test2a.js",
-    "test2b": "node test/test2b.js",
-    "test3": "node test/test3.js",
-    "test4": "node test/test4.js"
+    "record_manipulation": "node test/record_manipulation.js",
+    "iso2709_async": "node test/iso2709_async.js",
+    "iso2709_sync": "node test/iso2709_sync.js"
   },
   "engines": {
     "node": ">= 0.8.0"

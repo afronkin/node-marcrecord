@@ -12,37 +12,37 @@ var MarcDataField = marcrecord.MarcDataField;
 var MarcSubfield = marcrecord.MarcSubfield;
 
 exports.records = [
-  new MarcRecord([
-    new MarcControlField('001', 'ID/1'),
-    new MarcDataField('950', '3', '4', [
-      new MarcSubfield('1', new MarcDataField('905', '5', '6', [
-        new MarcSubfield('z', 'Z'),
-        new MarcSubfield('a', 'A')
+  MarcRecord([
+    MarcControlField('001', 'ID/1'),
+    MarcDataField('950', '3', '4', [
+      MarcSubfield('c', 'C'),
+      MarcSubfield('b', 'B'),
+      MarcSubfield('1', MarcDataField('905', '5', '6', [
+        MarcSubfield('z', 'Z'),
+        MarcSubfield('a', 'A')
       ])),
-      new MarcSubfield('c', 'C'),
-      new MarcSubfield('1', new MarcControlField('001', '2')),
-      new MarcSubfield('b', 'B'),
-      new MarcSubfield('1', new MarcDataField('905', '7', '8', [
-        new MarcSubfield('q', 'Q'),
-        new MarcSubfield('g', 'G')
+      MarcSubfield('1', MarcControlField('001', '2')),
+      MarcSubfield('1', MarcDataField('905', '7', '8', [
+        MarcSubfield('q', 'Q'),
+        MarcSubfield('g', 'G')
       ])),
     ]),
-    new MarcDataField('900', '1', '2', [
-      new MarcSubfield('c', 'C'),
-      new MarcSubfield('a', 'A'),
-      new MarcSubfield('b', 'B')
+    MarcDataField('900', '1', '2', [
+      MarcSubfield('c', 'C'),
+      MarcSubfield('a', 'A'),
+      MarcSubfield('b', 'B')
     ]),
-    new MarcDataField('900', '3', '4', [
-      new MarcSubfield('z', 'Z'),
-      new MarcSubfield('x', 'X'),
-      new MarcSubfield('y', 'Y')
+    MarcDataField('900', '3', '4', [
+      MarcSubfield('z', 'Z'),
+      MarcSubfield('x', 'X'),
+      MarcSubfield('y', 'Y')
     ])
   ]),
-  new MarcRecord([
-    new MarcControlField('001', 'ID/2'),
-    new MarcDataField('100', ' ', ' ', [
-      new MarcSubfield('a', 'A'),
-      new MarcSubfield('b', 'B')
-    ])
+  MarcRecord([
+    MarcDataField('100', ' ', ' ', [
+      MarcSubfield('b', 'B'),
+      MarcSubfield('a', 'A')
+    ]),
+    MarcControlField('001', 'ID/2')
   ])
 ];
