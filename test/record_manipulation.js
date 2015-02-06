@@ -65,6 +65,12 @@ function access() {
   var fields = record.getVariableFields('001');
   assert(fields.length === 1 && fields[0].tag === '001');
 
+  // Get control field data.
+  var fieldData = record.getControlFieldData('001');
+  assert(fieldData === 'ID/1');
+  var fieldData = record.getControlFieldData('002');
+  assert(fieldData === null);
+
   // Get subfields.
   var fields = record.getVariableFields('900');
   var subfields = fields.length > 0 ? fields[0].getSubfields('a') : [];
