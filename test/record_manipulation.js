@@ -92,6 +92,17 @@ function access() {
   assert(field);
   var embeddedField = field.getVariableField('905');
   assert(embeddedField && embeddedField.subfields.length === 2);
+
+  // Get control embedded fields and data.
+  var field = record.getVariableField('950');
+  assert(field);
+  var embeddedControlNumber = field.getControlFieldData('001');
+  assert(embeddedControlNumber === '2');
+  var embeddedControlNumberField = field.getControlNumberField('001');
+  assert(embeddedControlNumberField
+    && embeddedControlNumberField.data === '2');
+  var embeddedControlNumber = field.getControlNumber();
+  assert(embeddedControlNumber === '2');
 }
 
 function modify() {
