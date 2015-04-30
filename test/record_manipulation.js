@@ -65,6 +65,11 @@ function access() {
   var fields = record.getVariableFields('001');
   assert(fields.length === 1 && fields[0].tag === '001');
 
+  // Get data fields with specified indicators.
+  var fields = record.getDataFields('900', null, '4');
+  assert(fields.length === 1 && fields[0].tag === '900'
+    && fields[0].ind2 === '4');
+
   // Get control field data.
   var fieldData = record.getControlFieldData('001');
   assert(fieldData === 'ID/1');
