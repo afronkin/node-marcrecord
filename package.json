@@ -11,7 +11,9 @@
   "scripts": {
     "record_manipulation": "node test/record_manipulation.js",
     "iso2709_async": "node test/iso2709_async.js",
-    "iso2709_sync": "node test/iso2709_sync.js"
+    "iso2709_sync": "node test/iso2709_sync.js",
+    "marcxml_async": "node test/marcxml_async.js",
+    "marcxml_sync": "node test/marcxml_sync.js"
   },
   "engines": {
     "node": ">= 0.8.0"
