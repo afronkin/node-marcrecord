@@ -64,11 +64,29 @@ function access() {
   // Get fields.
   var fields = record.getVariableFields('001');
   assert(fields.length === 1 && fields[0].tag === '001');
+  var fields = record.getVariableFields(/^90/);
+  assert(fields.length === 2
+    && fields[0].tag === '900' && fields[1].tag === '900');
+  var fields = record.getControlFields(['001']);
+  assert(fields.length === 1 && fields[0].tag === '001');
+  var fields = record.getVariableFields();
+  assert(fields.length === 4);
+  var fields = record.getDataFields();
+  assert(fields.length === 3);
+
+  // Get single field.
+  var field = record.getVariableField('001');
+  assert(field && field.tag === '001');
+  var field = record.getVariableField(/^95\d/);
+  assert(field && field.tag === '950');
 
   // Get data fields with specified indicators.
   var fields = record.getDataFields('900', null, '4');
   assert(fields.length === 1 && fields[0].tag === '900'
     && fields[0].ind2 === '4');
+  var fields = record.getDataFields([/^95/], '3', '4');
+  assert(fields.length === 1 && fields[0].tag === '950'
+    && fields[0].ind1 === '3' && fields[0].ind2 === '4');
 
   // Get control field data.
   var fieldData = record.getControlFieldData('001');
@@ -85,17 +103,26 @@ function access() {
   var fields = record.getVariableFields('900');
   var subfieldData = fields.length > 0 ? fields[0].getSubfieldData('a') : null;
   assert(subfieldData === 'A');
+  var fields = record.getVariableFields(['959', /^95.$/]);
+  var subfieldData = fields.length > 0 ? fields[0].getSubfieldData('b') : null;
+  assert(subfieldData === 'B');
+  var subfieldData = record.getSubfieldData('950', 'c');
+  assert(subfieldData === 'C');
+  var subfieldData = record.getSubfieldData([/950/], 'b');
+  assert(subfieldData === 'B');
 
   // Get embedded fields.
   var field = record.getVariableField('950');
   assert(field);
-  var embeddedFields = field.getVariableFields(['001', '905']);
+  var embeddedFields = field.getVariableFields(['001', /90[5]/]);
   assert(embeddedFields.length === 3);
 
   // Get single embedded field.
   var field = record.getVariableField('950');
   assert(field);
   var embeddedField = field.getVariableField('905');
+  assert(embeddedField && embeddedField.subfields.length === 2);
+  var embeddedField = field.getVariableField([/^9/]);
   assert(embeddedField && embeddedField.subfields.length === 2);
 
   // Get control embedded fields and data.
