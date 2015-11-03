@@ -44,5 +44,12 @@ exports.records = [
       MarcSubfield('a', 'A')
     ]),
     MarcControlField('001', 'ID/2')
+  ]),
+  MarcRecord([
+    MarcControlField('001', 'ID/2'),
+    MarcDataField('100', ' ', ' ', [
+      MarcSubfield('a', 'A'),
+      MarcSubfield('b', 'B')
+    ])
   ])
 ];
