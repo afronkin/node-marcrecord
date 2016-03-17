@@ -108,4 +108,16 @@ assert(!MarcSubfield.equals(data.records[1].getSubfield('100', 'a'),
 assert(MarcSubfield.equals(data.records[0].getSubfield('950', '1'),
   data.records[0].getSubfield('950', '1')));
 
+/*
+ * MarcRecord.toEmbeddedFields()
+ */
+var embeddedFields = data.records[0].toEmbeddedFields();
+assert(embeddedFields.length === 4
+  && embeddedFields.every(function (v) { return v.isEmbeddedField(); }));
+
+var fields = data.records[0].getVariableFields('900');
+var embeddedFields = MarcRecord.toEmbeddedFields(fields);
+assert(embeddedFields.length === 2
+  && embeddedFields.every(function (v) { return v.isEmbeddedField(); }));
+
 console.error('OK');
