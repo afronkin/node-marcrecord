@@ -5,6 +5,8 @@ var isowriter = require('./lib/isowriter');
 var jsonreader = require('./lib/jsonreader');
 var xmlwriter = require('./lib/xmlwriter');
 
+var MarcJsonReader = jsonreader.MarcJsonReader;
+
 module.exports = {
   MarcRecord: record.MarcRecord,
   MarcVariableField: field.MarcVariableField,
@@ -16,8 +18,8 @@ module.exports = {
   MarcJsonReader: jsonreader.MarcJsonReader,
   MarcXmlWriter: xmlwriter.MarcXmlWriter,
 
-  parse: jsonreader.MarcJsonReader.parseRecord,
-  parseRecord: jsonreader.MarcJsonReader.parseRecord,
-  parseField: jsonreader.MarcJsonReader.parseField,
-  parseSubfield: jsonreader.MarcJsonReader.parseSubfield
+  parse: MarcJsonReader.parseRecord,
+  parseRecord: MarcJsonReader.parseRecord,
+  parseField: MarcJsonReader.parseField,
+  parseSubfield: MarcJsonReader.parseSubfield
 };
