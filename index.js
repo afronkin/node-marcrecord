@@ -5,16 +5,19 @@ var isowriter = require('./lib/isowriter');
 var jsonreader = require('./lib/jsonreader');
 var xmlwriter = require('./lib/xmlwriter');
 
-var exports = module.exports = {};
-exports.MarcRecord = record.MarcRecord;
-exports.MarcVariableField = field.MarcVariableField;
-exports.MarcControlField = field.MarcControlField;
-exports.MarcDataField = field.MarcDataField;
-exports.MarcSubfield = field.MarcSubfield;
-exports.MarcIsoReader = isoreader.MarcIsoReader;
-exports.MarcIsoWriter = isowriter.MarcIsoWriter;
-exports.MarcJsonReader = jsonreader.MarcJsonReader;
-exports.MarcXmlWriter = xmlwriter.MarcXmlWriter;
-exports.parse = exports.parseRecord = jsonreader.parseRecord;
-exports.parseField = jsonreader.parseField;
-exports.parseSubfield = jsonreader.parseSubfield;
+module.exports = {
+  MarcRecord: record.MarcRecord,
+  MarcVariableField: field.MarcVariableField,
+  MarcControlField: field.MarcControlField,
+  MarcDataField: field.MarcDataField,
+  MarcSubfield: field.MarcSubfield,
+  MarcIsoReader: isoreader.MarcIsoReader,
+  MarcIsoWriter: isowriter.MarcIsoWriter,
+  MarcJsonReader: jsonreader.MarcJsonReader,
+  MarcXmlWriter: xmlwriter.MarcXmlWriter,
+
+  parse: jsonreader.MarcJsonReader.parseRecord,
+  parseRecord: jsonreader.MarcJsonReader.parseRecord,
+  parseField: jsonreader.MarcJsonReader.parseField,
+  parseSubfield: jsonreader.MarcJsonReader.parseSubfield
+};
