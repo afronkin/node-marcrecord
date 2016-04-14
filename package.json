@@ -16,10 +16,11 @@
     "marcxml_sync": "node test/marcxml_sync.js"
   },
   "engines": {
-    "node": ">= 0.8.0"
+    "node": ">= 0.10.0"
   },
   "dependencies": {
-    "iconv-lite": ">= 0.4.4"
+    "iconv-lite": ">= 0.4.4",
+    "sax": ">= 1.2.1"
   },
   "bugs": {
     "url": "https://github.com/afronkin/node-marcrecord/issues"
