@@ -7,48 +7,44 @@ try {
 }
 
 var data = require('./data');
+
 var isoFileName = 'records.iso';
+var jsonFileName = 'records.json';
 var xmlFileName = 'records.xml';
+var encoding = 'utf-8';
 
-function isoWrite() {
-  var marcWriter = new marcrecord.MarcIsoWriter();
-  marcWriter.openSync(isoFileName, {encoding: 'utf-8'});
+function writeRecords(fileName, marcWriter) {
+  marcWriter.openSync(fileName, {encoding: encoding});
   for (var i = 0; i < data.records.length; i++) {
     marcWriter.writeSync(data.records[i]);
   }
   marcWriter.closeSync();
 }
 
-function isoRead() {
-  var marcReader = new marcrecord.MarcIsoReader();
-  marcReader.openSync(isoFileName, {encoding: 'utf-8'});
+function readRecords(fileName, marcReader) {
+  marcReader.openSync(fileName, {encoding: encoding});
   for (var i = 0; record = marcReader.nextSync(); i++) {
     assert(record.equals(data.records[i]));
   }
   marcReader.closeSync();
 }
 
-function xmlWrite() {
-  var marcWriter = new marcrecord.MarcXmlWriter();
-  marcWriter.openSync(xmlFileName, {encoding: 'utf-8'});
-  for (var i = 0; i < data.records.length; i++) {
-    marcWriter.writeSync(data.records[i]);
-  }
-  marcWriter.closeSync();
-}
+var marcIsoWriter = new marcrecord.MarcIsoWriter();
+writeRecords(isoFileName, marcIsoWriter);
 
-function xmlRead() {
-  var marcReader = new marcrecord.MarcXmlReader();
-  marcReader.openSync(xmlFileName, {encoding: 'utf-8'});
-  for (var i = 0; record = marcReader.nextSync(); i++) {
-    assert(record.equals(data.records[i]));
-  }
-  marcReader.closeSync();
-}
+var marcIsoReader = new marcrecord.MarcIsoReader();
+readRecords(isoFileName, marcIsoReader);
 
-isoWrite();
-isoRead();
-xmlWrite();
-xmlRead();
+var marcJsonWriter = new marcrecord.MarcJsonWriter();
+writeRecords(jsonFileName, marcJsonWriter);
+
+var marcJsonReader = new marcrecord.MarcJsonReader();
+readRecords(jsonFileName, marcJsonReader);
+
+var marcXmlWriter = new marcrecord.MarcXmlWriter();
+writeRecords(xmlFileName, marcXmlWriter);
+
+var marcXmlReader = new marcrecord.MarcXmlReader();
+readRecords(xmlFileName, marcXmlReader);
 
 console.error('OK');

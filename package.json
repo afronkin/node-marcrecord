@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "iconv-lite": ">= 0.4.4",
+    "jsonparse": ">= 1.2.0",
     "sax": ">= 1.2.1"
   },
   "bugs": {

@@ -8,6 +8,7 @@ try {
 
 var data = require('./data');
 var isoFileName = 'records.iso';
+var jsonFileName = 'records.json';
 var xmlFileName = 'records.xml';
 
 function writeRecord(marcWriter, recNo, callback) {
@@ -63,14 +64,23 @@ writeRecords(isoFileName, marcIsoWriter, function (err) {
   readRecords(isoFileName, marcIsoReader, function (err) {
     assert(!err);
 
-    var marcXmlWriter = new marcrecord.MarcXmlWriter();
-    writeRecords(xmlFileName, marcXmlWriter, function (err) {
+    var marcJsonWriter = new marcrecord.MarcJsonWriter();
+    writeRecords(jsonFileName, marcJsonWriter, function (err) {
       assert(!err);
-
-      var marcXmlReader = new marcrecord.MarcXmlReader();
-      readRecords(xmlFileName, marcXmlReader, function (err) {
+      var marcJsonReader = new marcrecord.MarcJsonReader();
+      readRecords(jsonFileName, marcJsonReader, function (err) {
         assert(!err);
-        console.error('OK');
+
+        var marcXmlWriter = new marcrecord.MarcXmlWriter();
+        writeRecords(xmlFileName, marcXmlWriter, function (err) {
+          assert(!err);
+
+          var marcXmlReader = new marcrecord.MarcXmlReader();
+          readRecords(xmlFileName, marcXmlReader, function (err) {
+            assert(!err);
+            console.error('OK');
+          });
+        });
       });
     });
   });
