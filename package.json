@@ -1,7 +1,7 @@
 {
   "name": "marcrecord",
   "description": "MARC record library (inspired by marc4j)",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "author": "Alexander Fronkin <alexander.fronkin@afronkin.net>",
   "repository": {
     "type": "git",
