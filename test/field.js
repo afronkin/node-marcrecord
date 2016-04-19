@@ -23,6 +23,18 @@ var field = new MarcVariableField();
 assert(field.tag === '???');
 
 /*
+ * MarcVariableField.isControlField()
+ */
+assert(data.records[0].fields[0].isControlField());
+assert(!data.records[0].fields[1].isControlField());
+
+/*
+ * MarcVariableField.isDataField()
+ */
+assert(!data.records[0].fields[0].isDataField());
+assert(data.records[0].fields[1].isDataField());
+
+/*
  * MarcVariableField.equals()
  */
 var field1 = data.records[0].fields[0];
@@ -38,17 +50,19 @@ assert(!MarcVariableField.equals(field1, field2, true));
 assert(!MarcVariableField.equals(field2, field3));
 assert(!MarcVariableField.equals(field2, field3, true));
 
-/*
- * MarcVariableField.isControlField()
- */
-assert(data.records[0].fields[0].isControlField());
-assert(!data.records[0].fields[1].isControlField());
+assert(MarcVariableField.equals(data.records[0].getVariableField('001'),
+  data.records[0].getVariableField('001')));
+assert(!MarcVariableField.equals(data.records[0].getVariableField('001'),
+  data.records[1].getVariableField('001')));
+assert(!MarcVariableField.equals(data.records[1].getVariableField('100'),
+  data.records[2].getVariableField('100')));
+assert(MarcVariableField.equals(data.records[1].getVariableField('100'),
+  data.records[2].getVariableField('100'), true));
 
-/*
- * MarcVariableField.isControlField()
- */
-assert(!data.records[0].fields[0].isDataField());
-assert(data.records[0].fields[1].isDataField());
+var subfields1 = data.records[1].getVariableField('100').getSubfields();
+var subfields2 = data.records[2].getVariableField('100').getSubfields();
+assert(!MarcVariableField.equals(subfields1, subfields2));
+assert(MarcVariableField.equals(subfields1, subfields2, true));
 
 /*
  * MarcVariableField.getTag()
@@ -97,6 +111,16 @@ assert(!field1.equals(field3));
 assert(MarcControlField.equals(field1, field1));
 assert(MarcControlField.equals(field1, field2));
 assert(!MarcControlField.equals(field1, field3));
+
+assert(data.records[0].getControlNumberField().equals(
+  data.records[0].getControlNumberField()));
+assert(!data.records[0].getControlNumberField().equals(
+  data.records[1].getControlNumberField()));
+
+assert(MarcControlField.equals(data.records[0].getControlNumberField(),
+  data.records[0].getControlNumberField()));
+assert(!MarcControlField.equals(data.records[0].getControlNumberField(),
+  data.records[1].getControlNumberField()));
 
 /*
  * MarcControlField.getData()
@@ -159,6 +183,16 @@ assert(!MarcDataField.equals(field1, field4));
 assert(!MarcDataField.equals(field1, field4, true));
 assert(!MarcDataField.equals(field1, field5));
 assert(MarcDataField.equals(field1, field5, true));
+
+assert(!MarcDataField.equals(data.records[1].getVariableField('100'),
+  data.records[2].getVariableField('100')));
+assert(MarcDataField.equals(data.records[1].getVariableField('100'),
+  data.records[2].getVariableField('100'), true));
+
+var subfields1 = data.records[1].getVariableField('100').getSubfields();
+var subfields2 = data.records[2].getVariableField('100').getSubfields();
+assert(!MarcDataField.equals(subfields1, subfields2));
+assert(MarcDataField.equals(subfields1, subfields2, true));
 
 /*
  * MarcDataField.size()
@@ -357,6 +391,20 @@ assert(!MarcSubfield.equals(subfield1, subfield3));
 assert(!MarcSubfield.equals(subfield1, subfield3, true));
 assert(!MarcSubfield.equals(subfield4, subfield5));
 assert(MarcSubfield.equals(subfield4, subfield5, true));
+
+assert(data.records[1].getSubfield('100', 'a').equals(
+  data.records[1].getSubfield('100', 'a')));
+assert(!data.records[1].getSubfield('100', 'a').equals(
+  data.records[1].getSubfield('100', 'b')));
+assert(data.records[0].getSubfield('950', '1').equals(
+  data.records[0].getSubfield('950', '1')));
+
+assert(MarcSubfield.equals(data.records[1].getSubfield('100', 'a'),
+  data.records[1].getSubfield('100', 'a')));
+assert(!MarcSubfield.equals(data.records[1].getSubfield('100', 'a'),
+  data.records[1].getSubfield('100', 'b')));
+assert(MarcSubfield.equals(data.records[0].getSubfield('950', '1'),
+  data.records[0].getSubfield('950', '1')));
 
 /*
  * MarcSubfield.isEmbeddedField()
