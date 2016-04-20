@@ -63,11 +63,24 @@ assert(data.records[1].size() === 2);
 assert(data.records[2].size() === 2);
 
 /*
+ * MarcRecord.empty()
+ */
+assert(!data.records[0].empty());
+assert((new MarcRecord()).empty());
+
+/*
  * MarcRecord.clear()
  */
 var record = new MarcRecord(data.records[0]);
 record.clear();
 assert(record.fields.length === 0);
+
+/*
+ * MarcRecord.trim()
+ */
+var record = new MarcRecord(data.records[3]);
+record.trim();
+assert(record.fields.length === 2);
 
 /*
  * MarcRecord.addVariableField()
@@ -98,7 +111,7 @@ assert(record.fields.length === 3);
 record.removeVariableField(1);
 assert(record.fields.length === 2);
 record.removeVariableField(record.fields[1]);
-assert(record.fields.length === 2);
+assert(record.fields.length === 1);
 
 /*
  * MarcRecord.getVariableFields()
