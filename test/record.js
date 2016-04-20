@@ -79,11 +79,24 @@ record.addVariableField(
 assert(record.fields.length === 2);
 
 /*
+ * MarcRecord.removeVariableFields()
+ */
+var record = new MarcRecord(data.records[0]);
+record.removeVariableFields(record.getVariableFields('900'));
+assert(record.fields.length === 2);
+record.removeVariableFields([1]);
+assert(record.fields.length === 1);
+record.removeVariableFields(record.getVariableFields());
+assert(record.fields.length === 0);
+
+/*
  * MarcRecord.removeVariableField()
  */
 var record = new MarcRecord(data.records[0]);
 record.removeVariableField(record.fields[0]);
 assert(record.fields.length === 3);
+record.removeVariableField(1);
+assert(record.fields.length === 2);
 record.removeVariableField(record.fields[1]);
 assert(record.fields.length === 2);
 

@@ -301,13 +301,28 @@ field.addSubfield(0, new MarcSubfield('c', 'C'));
 assert(field.subfields.length === 3 && field.subfields[0].data === 'C');
 
 /*
+ * MarcDataField.removeSubfields()
+ */
+var field = new MarcDataField(data.records[0].fields[1]);
+field.removeSubfields(field.getSubfields(['a', 'b']));
+assert(field.subfields.length === 4);
+field.removeSubfields([1]);
+assert(field.subfields.length === 3);
+field.removeSubfields(field.getSubfields('1'));
+assert(field.subfields.length === 1);
+field.removeSubfields(field.getSubfields());
+assert(field.subfields.length === 0);
+
+/*
  * MarcDataField.removeSubfield()
  */
 var field = new MarcDataField(data.records[0].fields[1]);
 field.removeSubfield(field.subfields[0]);
 assert(field.subfields.length === 4 && field.subfields[0].data === 'B');
-field.removeSubfield(field.subfields[1]);
+field.removeSubfield(1);
 assert(field.subfields.length === 3);
+field.removeSubfield(field.subfields[1]);
+assert(field.subfields.length === 2);
 
 /*
  * MarcDataField.getVariableFields()
@@ -362,11 +377,22 @@ field.addVariableField(0, data.records[0].fields[2]);
 assert(field.subfields.length === 2 && field.subfields[0].data.tag === '900');
 
 /*
+ * MarcDataField.removeVariableFields()
+ */
+var field = new MarcDataField(data.records[0].fields[1]);
+field.removeVariableFields(field.getVariableFields('905'));
+assert(field.subfields.length === 3);
+field.removeVariableFields([0]);
+assert(field.subfields.length === 2);
+
+/*
  * MarcDataField.removeVariableField()
  */
 var field = new MarcDataField(data.records[0].fields[1]);
 field.removeVariableField(field.getVariableField('001'));
 assert(field.subfields.length === 4);
+field.removeVariableField(1);
+assert(field.subfields.length === 3);
 
 /*
  * MarcDataField.sort()
