@@ -64,7 +64,7 @@ exports.records = [
         MarcSubfield('b', 'B'),
         MarcSubfield('c', '')
       ])),
-      MarcSubfield('c', '')
+      MarcSubfield('1', MarcDataField('900', ' ', ' ')),
     ]),
     MarcDataField('950', ' ', ' ', [])
   ])
