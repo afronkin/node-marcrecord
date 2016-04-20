@@ -197,6 +197,40 @@ try {
 }
 
 /*
+ * MarcRecord.getRegularSubfield()
+ */
+assert(data.records[0].getRegularSubfield('900', 'a').data === 'A');
+assert(data.records[0].getRegularSubfield('900', null, /^A/).data === 'A');
+assert(data.records[0].getRegularSubfield(
+  /^9../, ['b', 'c'], /^B/).data === 'B');
+assert(data.records[0].getRegularSubfield('555', null, /^A/) === null);
+assert(data.records[0].getRegularSubfield(
+  '950', ['a', 'b', 'c', '1']).data === 'C');
+assert(data.records[0].getRegularSubfield(/^9../, 'a') === null);
+try {
+  data.records[0].getRegularSubfield(null, null, /^A/);
+} catch (err) {
+  assert(err.message === 'tags must be specified');
+}
+
+/*
+ * MarcRecord.getRegularSubfieldData()
+ */
+assert(data.records[0].getRegularSubfieldData('900', 'a') === 'A');
+assert(data.records[0].getRegularSubfieldData('900', null, /^A/) === 'A');
+assert(data.records[0].getRegularSubfieldData(
+  /^9../, ['b', 'c'], /^B/) === 'B');
+assert(data.records[0].getRegularSubfieldData('555', null, /^A/) === null);
+assert(data.records[0].getRegularSubfieldData(
+  '950', ['a', 'b', 'c', '1']) === 'C');
+assert(data.records[0].getRegularSubfieldData(/^9../, 'a') === null);
+try {
+  data.records[0].getRegularSubfieldData(null, null, /^A/);
+} catch (err) {
+  assert(err.message === 'tags must be specified');
+}
+
+/*
  * MarcRecord.getLeader()
  */
 assert(data.records[0].getLeader() === data.records[0].leader);

@@ -254,6 +254,42 @@ assert(field.getSubfieldData('z') === null);
 assert(field.getSubfieldData(['z', 'b', 'c']) === 'C');
 
 /*
+ * MarcDataField.getRegularSubfields()
+ */
+var field = data.records[0].fields[1];
+assert(field.getRegularSubfields().length === 2);
+assert(field.getRegularSubfields(null, /^B/).length === 1);
+assert(field.getRegularSubfields(null, /[CZ]/).length === 1);
+assert(field.getRegularSubfields(null, /^[BCZ]$/).length === 2);
+assert(field.getRegularSubfields('b', /^[BC]/).length === 1);
+assert(field.getRegularSubfields(['b', 'c'], /^[C]/).length === 1);
+assert(field.getRegularSubfields('1', /[BCZ]/).length === 0);
+
+/*
+ * MarcDataField.getRegularSubfield()
+ */
+var field = data.records[0].fields[1];
+assert(field.getRegularSubfield().data === 'C');
+assert(field.getRegularSubfield(null, /^B/).data === 'B');
+assert(field.getRegularSubfield(null, /[CZ]/).data === 'C');
+assert(field.getRegularSubfield(null, /^[BCZ]$/).data === 'C');
+assert(field.getRegularSubfield('b', /^[BC]/).data === 'B');
+assert(field.getRegularSubfield(['b', 'c'], /^[C]/).data === 'C');
+assert(field.getRegularSubfield('1', /[BCZ]/) === null);
+
+/*
+ * MarcDataField.getRegularSubfieldData()
+ */
+var field = data.records[0].fields[1];
+assert(field.getRegularSubfieldData() === 'C');
+assert(field.getRegularSubfieldData(null, /^B/) === 'B');
+assert(field.getRegularSubfieldData(null, /[CZ]/) === 'C');
+assert(field.getRegularSubfieldData(null, /^[BCZ]$/) === 'C');
+assert(field.getRegularSubfieldData('b', /^[BC]/) === 'B');
+assert(field.getRegularSubfieldData(['b', 'c'], /^[C]/) === 'C');
+assert(field.getRegularSubfieldData('1', /[BCZ]/) === null);
+
+/*
  * MarcDataField.addSubfield()
  */
 var field = new MarcDataField('555');
