@@ -23,6 +23,18 @@ var field = new MarcVariableField();
 assert(field.tag === '???');
 
 /*
+ * MarcVariableField.clone()
+ */
+var field = MarcVariableField.clone(data.records[0].fields[0]);
+assert(field !== data.records[0].fields[0]);
+assert(field.equals(data.records[0].fields[0]));
+var field = MarcVariableField.clone(data.records[0].fields[1]);
+assert(field !== data.records[0].fields[1]);
+assert(field.equals(data.records[0].fields[1]));
+var field = MarcVariableField.clone({});
+assert(field === null);
+
+/*
  * MarcVariableField.isControlField()
  */
 assert(data.records[0].fields[0].isControlField());
@@ -98,6 +110,17 @@ var field = new MarcControlField(data.records[0].fields[0]);
 assert(field.tag === '001' && field.data === 'ID/1');
 
 /*
+ * MarcControlField.clone()
+ */
+var field = MarcControlField.clone(data.records[0].fields[0]);
+assert(field !== data.records[0].fields[0]);
+assert(field.equals(data.records[0].fields[0]));
+var field = MarcControlField.clone(data.records[0].fields[1]);
+assert(field === null);
+var field = MarcControlField.clone({});
+assert(field === null);
+
+/*
  * MarcControlField.equals()
  */
 var field1 = data.records[0].fields[0];
@@ -160,6 +183,17 @@ assert(field.subfields.length === 1);
 var field = new MarcDataField(data.records[0].fields[1]);
 assert(field.tag === '950' && field.ind1 === '3' && field.ind2 === '4'
   && field.subfields.length === 5);
+
+/*
+ * MarcDataField.clone()
+ */
+var field = MarcDataField.clone(data.records[0].fields[0]);
+assert(field === null);
+var field = MarcDataField.clone(data.records[0].fields[1]);
+assert(field !== data.records[0].fields[1]);
+assert(field.equals(data.records[0].fields[1]));
+var field = MarcDataField.clone({});
+assert(field === null);
 
 /*
  * MarcDataField.equals()
@@ -447,6 +481,15 @@ assert(subfield.data.isControlField() && subfield.data.tag === '001');
 
 var subfield = new MarcSubfield(data.records[0].fields[1].subfields[2]);
 assert(subfield.data.isDataField() && subfield.data.tag === '905');
+
+/*
+ * MarcSubfield.clone()
+ */
+var subfield = MarcSubfield.clone(data.records[0].fields[1].subfields[0]);
+assert(subfield !== data.records[0].fields[1].subfields[0]);
+assert(subfield.equals(data.records[0].fields[1].subfields[0]));
+var subfield = MarcSubfield.clone({});
+assert(subfield === null);
 
 /*
  * MarcSubfield.equals()
