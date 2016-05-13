@@ -145,6 +145,15 @@ assert(MarcControlField.equals(data.records[0].getControlNumberField(),
 assert(!MarcControlField.equals(data.records[0].getControlNumberField(),
   data.records[1].getControlNumberField()));
 
+var field1 = new MarcControlField('001', 'Value1, value2');
+var field2 = new MarcControlField('001', 'VALUE1, Value2');
+assert(!field1.equals(field2));
+assert(field1.equals(field2, {ignoreCase: true}));
+var field1 = new MarcControlField('001', 'value1, value2');
+var field2 = new MarcControlField('001', 'value1 value2.');
+assert(!field1.equals(field2));
+assert(field1.equals(field2, {ignoreChars: /[\.\,]/g}));
+
 /*
  * MarcControlField.empty()
  */
@@ -236,6 +245,19 @@ var subfields1 = data.records[1].getVariableField('100').getSubfields();
 var subfields2 = data.records[2].getVariableField('100').getSubfields();
 assert(!MarcDataField.equals(subfields1, subfields2));
 assert(MarcDataField.equals(subfields1, subfields2, {ignoreOrder: true}));
+
+var field1 = new MarcDataField('555', ' ', ' ',
+  [new MarcSubfield('a', 'Value1, value2')]);
+var field2 = new MarcDataField('555', ' ', ' ',
+  [new MarcSubfield('a', 'VALUE1, Value2')]);
+assert(!field1.equals(field2));
+assert(field1.equals(field2, {ignoreCase: true}));
+var field1 = new MarcDataField('555', ' ', ' ',
+  [new MarcSubfield('a', 'value1, value2')]);
+var field2 = new MarcDataField('555', ' ', ' ',
+  [new MarcSubfield('a', 'value1 value2.')]);
+assert(!field1.equals(field2));
+assert(field1.equals(field2, {ignoreChars: /[\.\,]/g}));
 
 /*
  * MarcDataField.size()
@@ -532,6 +554,15 @@ assert(!MarcSubfield.equals(data.records[1].getSubfield('100', 'a'),
   data.records[1].getSubfield('100', 'b')));
 assert(MarcSubfield.equals(data.records[0].getSubfield('950', '1'),
   data.records[0].getSubfield('950', '1')));
+
+var subfield1 = new MarcSubfield('a', 'Value1, value2');
+var subfield2 = new MarcSubfield('a', 'VALUE1, Value2');
+assert(!subfield1.equals(subfield2));
+assert(subfield1.equals(subfield2, {ignoreCase: true}));
+var subfield1 = new MarcSubfield('a', 'value1, value2');
+var subfield2 = new MarcSubfield('a', 'value1 value2.');
+assert(!subfield1.equals(subfield2));
+assert(subfield1.equals(subfield2, {ignoreChars: /[\.\,]/g}));
 
 /*
  * MarcSubfield.empty()
