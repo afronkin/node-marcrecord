@@ -54,13 +54,13 @@ var field2 = data.records[0].fields[1];
 var field3 = data.records[0].fields[2];
 
 assert(MarcVariableField.equals(field1, field1));
-assert(MarcVariableField.equals(field1, field1, true));
+assert(MarcVariableField.equals(field1, field1, {ignoreOrder: true}));
 assert(MarcVariableField.equals(field2, field2));
-assert(MarcVariableField.equals(field2, field2, true));
+assert(MarcVariableField.equals(field2, field2, {ignoreOrder: true}));
 assert(!MarcVariableField.equals(field1, field2));
-assert(!MarcVariableField.equals(field1, field2, true));
+assert(!MarcVariableField.equals(field1, field2, {ignoreOrder: true}));
 assert(!MarcVariableField.equals(field2, field3));
-assert(!MarcVariableField.equals(field2, field3, true));
+assert(!MarcVariableField.equals(field2, field3, {ignoreOrder: true}));
 
 assert(MarcVariableField.equals(data.records[0].getVariableField('001'),
   data.records[0].getVariableField('001')));
@@ -69,12 +69,12 @@ assert(!MarcVariableField.equals(data.records[0].getVariableField('001'),
 assert(!MarcVariableField.equals(data.records[1].getVariableField('100'),
   data.records[2].getVariableField('100')));
 assert(MarcVariableField.equals(data.records[1].getVariableField('100'),
-  data.records[2].getVariableField('100'), true));
+  data.records[2].getVariableField('100'), {ignoreOrder: true}));
 
 var subfields1 = data.records[1].getVariableField('100').getSubfields();
 var subfields2 = data.records[2].getVariableField('100').getSubfields();
 assert(!MarcVariableField.equals(subfields1, subfields2));
-assert(MarcVariableField.equals(subfields1, subfields2, true));
+assert(MarcVariableField.equals(subfields1, subfields2, {ignoreOrder: true}));
 
 /*
  * MarcVariableField.getTag()
@@ -206,36 +206,36 @@ var field5 = new MarcDataField(field1);
 field5.sort();
 
 assert(field1.equals(field1));
-assert(field1.equals(field1, true));
+assert(field1.equals(field1, {ignoreOrder: true}));
 assert(field1.equals(field2));
-assert(field1.equals(field2, true));
+assert(field1.equals(field2, {ignoreOrder: true}));
 assert(!field1.equals(field3));
-assert(!field1.equals(field3, true));
+assert(!field1.equals(field3, {ignoreOrder: true}));
 assert(!field1.equals(field4));
-assert(!field1.equals(field4, true));
+assert(!field1.equals(field4, {ignoreOrder: true}));
 assert(!field1.equals(field5));
-assert(field1.equals(field5, true));
+assert(field1.equals(field5, {ignoreOrder: true}));
 
 assert(MarcDataField.equals(field1, field1));
-assert(MarcDataField.equals(field1, field1, true));
+assert(MarcDataField.equals(field1, field1, {ignoreOrder: true}));
 assert(MarcDataField.equals(field1, field2));
-assert(MarcDataField.equals(field1, field2, true));
+assert(MarcDataField.equals(field1, field2, {ignoreOrder: true}));
 assert(!MarcDataField.equals(field1, field3));
-assert(!MarcDataField.equals(field1, field3, true));
+assert(!MarcDataField.equals(field1, field3, {ignoreOrder: true}));
 assert(!MarcDataField.equals(field1, field4));
-assert(!MarcDataField.equals(field1, field4, true));
+assert(!MarcDataField.equals(field1, field4, {ignoreOrder: true}));
 assert(!MarcDataField.equals(field1, field5));
-assert(MarcDataField.equals(field1, field5, true));
+assert(MarcDataField.equals(field1, field5, {ignoreOrder: true}));
 
 assert(!MarcDataField.equals(data.records[1].getVariableField('100'),
   data.records[2].getVariableField('100')));
 assert(MarcDataField.equals(data.records[1].getVariableField('100'),
-  data.records[2].getVariableField('100'), true));
+  data.records[2].getVariableField('100'), {ignoreOrder: true}));
 
 var subfields1 = data.records[1].getVariableField('100').getSubfields();
 var subfields2 = data.records[2].getVariableField('100').getSubfields();
 assert(!MarcDataField.equals(subfields1, subfields2));
-assert(MarcDataField.equals(subfields1, subfields2, true));
+assert(MarcDataField.equals(subfields1, subfields2, {ignoreOrder: true}));
 
 /*
  * MarcDataField.size()
@@ -502,22 +502,22 @@ var subfield5 = new MarcSubfield(subfield4);
 subfield5.data.sort();
 
 assert(subfield1.equals(subfield1));
-assert(subfield1.equals(subfield1, true));
+assert(subfield1.equals(subfield1, {ignoreOrder: true}));
 assert(subfield1.equals(subfield2));
-assert(subfield1.equals(subfield2, true));
+assert(subfield1.equals(subfield2, {ignoreOrder: true}));
 assert(!subfield1.equals(subfield3));
-assert(!subfield1.equals(subfield3, true));
+assert(!subfield1.equals(subfield3, {ignoreOrder: true}));
 assert(!subfield4.equals(subfield5));
-assert(subfield4.equals(subfield5, true));
+assert(subfield4.equals(subfield5, {ignoreOrder: true}));
 
 assert(MarcSubfield.equals(subfield1, subfield1));
-assert(MarcSubfield.equals(subfield1, subfield1, true));
+assert(MarcSubfield.equals(subfield1, subfield1, {ignoreOrder: true}));
 assert(MarcSubfield.equals(subfield1, subfield2));
-assert(MarcSubfield.equals(subfield1, subfield2, true));
+assert(MarcSubfield.equals(subfield1, subfield2, {ignoreOrder: true}));
 assert(!MarcSubfield.equals(subfield1, subfield3));
-assert(!MarcSubfield.equals(subfield1, subfield3, true));
+assert(!MarcSubfield.equals(subfield1, subfield3, {ignoreOrder: true}));
 assert(!MarcSubfield.equals(subfield4, subfield5));
-assert(MarcSubfield.equals(subfield4, subfield5, true));
+assert(MarcSubfield.equals(subfield4, subfield5, {ignoreOrder: true}));
 
 assert(data.records[1].getSubfield('100', 'a').equals(
   data.records[1].getSubfield('100', 'a')));

@@ -34,17 +34,20 @@ assert(record.fields.length === 2);
  * MarcRecord.equals()
  */
 assert(data.records[0].equals(data.records[0]));
-assert(data.records[0].equals(data.records[0], true));
+assert(data.records[0].equals(data.records[0], {ignoreOrder: true}));
 assert(!data.records[0].equals(data.records[1]));
-assert(!data.records[0].equals(data.records[1], true));
+assert(!data.records[0].equals(data.records[1], {ignoreOrder: true}));
 assert(!data.records[1].equals(data.records[2]));
 
 assert(MarcRecord.equals(data.records[0], data.records[0]));
-assert(MarcRecord.equals(data.records[0], data.records[0], true));
+assert(MarcRecord.equals(data.records[0], data.records[0],
+  {ignoreOrder: true}));
 assert(!MarcRecord.equals(data.records[0], data.records[1]));
-assert(!MarcRecord.equals(data.records[0], data.records[1], true));
+assert(!MarcRecord.equals(data.records[0], data.records[1],
+  {ignoreOrder: true}));
 assert(!MarcRecord.equals(data.records[1], data.records[2]));
-assert(MarcRecord.equals(data.records[1], data.records[2], true));
+assert(MarcRecord.equals(data.records[1], data.records[2],
+  {ignoreOrder: true}));
 
 assert(MarcRecord.equals(data.records[0].getVariableFields(),
   data.records[0]));
@@ -53,7 +56,7 @@ assert(!MarcRecord.equals(data.records[0],
 assert(MarcRecord.equals(data.records[0].getVariableFields('900'),
   data.records[0].getVariableFields('900')));
 assert(MarcRecord.equals(data.records[1].getVariableFields(),
-  data.records[2].getVariableFields(), true));
+  data.records[2].getVariableFields(), {ignoreOrder: true}));
 
 /*
  * MarcRecord.size()
