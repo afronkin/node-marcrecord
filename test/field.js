@@ -34,6 +34,10 @@ assert(field.equals(data.records[0].fields[1]));
 var field = MarcVariableField.clone({});
 assert(field === null);
 
+var field = data.records[0].fields[0].clone();
+assert(field !== data.records[0].fields[0]);
+assert(field.equals(data.records[0].fields[0]));
+
 /*
  * MarcVariableField.isControlField()
  */
@@ -120,6 +124,10 @@ assert(field === null);
 var field = MarcControlField.clone({});
 assert(field === null);
 
+var field = data.records[0].fields[0].clone();
+assert(field !== data.records[0].fields[0]);
+assert(field.equals(data.records[0].fields[0]));
+
 /*
  * MarcControlField.equals()
  */
@@ -203,6 +211,10 @@ assert(field !== data.records[0].fields[1]);
 assert(field.equals(data.records[0].fields[1]));
 var field = MarcDataField.clone({});
 assert(field === null);
+
+var field = data.records[0].fields[1].clone();
+assert(field !== data.records[0].fields[1]);
+assert(field.equals(data.records[0].fields[1]));
 
 /*
  * MarcDataField.equals()
@@ -530,6 +542,10 @@ assert(subfield !== data.records[0].fields[1].subfields[0]);
 assert(subfield.equals(data.records[0].fields[1].subfields[0]));
 var subfield = MarcSubfield.clone({});
 assert(subfield === null);
+
+var subfield = data.records[0].fields[1].subfields[0].clone();
+assert(subfield !== data.records[0].fields[1].subfields[0]);
+assert(subfield.equals(data.records[0].fields[1].subfields[0]));
 
 /*
  * MarcSubfield.equals()

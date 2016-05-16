@@ -31,6 +31,15 @@ var record = new MarcRecord(fields);
 assert(record.fields.length === 2);
 
 /*
+ * MarcRecord.clone()
+ */
+var record = MarcRecord.clone(data.records[0]);
+assert(record !== data.records[0] && record.equals(data.records[0]));
+assert(MarcRecord.clone({}) === null);
+var record = data.records[0].clone();
+assert(record !== data.records[0] && record.equals(data.records[0]));
+
+/*
  * MarcRecord.equals()
  */
 assert(data.records[0].equals(data.records[0]));
