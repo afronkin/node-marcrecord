@@ -368,6 +368,24 @@ assert(field.getRegularSubfieldData(['b', 'c'], /^[C]/) === 'C');
 assert(field.getRegularSubfieldData('1', /[BCZ]/) === null);
 
 /*
+ * MarcDataField.findSubfields()
+ */
+var field = data.records[0].fields[1];
+assert(field.findSubfields(new MarcSubfield('b', 'B')).length === 1);
+assert(field.findSubfields(new MarcSubfield('c', 'B')).length === 0);
+assert(field.findSubfields(new MarcSubfield('c', 'c'),
+  {ignoreCase: true}).length === 1);
+
+/*
+ * MarcDataField.findSubfield()
+ */
+var field = data.records[0].fields[1];
+assert(field.findSubfield(new MarcSubfield('b', 'B')).data === 'B');
+assert(field.findSubfield(new MarcSubfield('c', 'B')) === null);
+assert(field.findSubfield(new MarcSubfield('c', 'c'),
+  {ignoreCase: true}).data === 'C');
+
+/*
  * MarcDataField.addSubfield()
  */
 var field = new MarcDataField('555');
