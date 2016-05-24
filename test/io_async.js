@@ -6,15 +6,22 @@ try {
   var marcrecord = require('..');
 }
 
-var data = require('./data');
+var MarcRecord = marcrecord.MarcRecord;
+
 var isoFileName = 'records.iso';
 var jsonFileName = 'records.json';
 var xmlFileName = 'records.xml';
 
+var records = [
+  MarcRecord.parse('001 ID1\n005 20160101102030.1'),
+  MarcRecord.parse('001 ID2\n333 45$eEEE$fFFF\n444 56$gGGG$hHHH'),
+  MarcRecord.parse('001 ID3\n444 56$1001ID2$110023$xXXX$yYYY')
+];
+
 function writeRecord(marcWriter, recNo, callback) {
-  marcWriter.write(data.records[recNo], function(err) {
+  marcWriter.write(records[recNo], function(err) {
     assert(!err);
-    if (recNo + 1 === data.records.length) {
+    if (recNo + 1 === records.length) {
       return callback(null);
     }
     setImmediate(writeRecord, marcWriter, recNo + 1, callback);
@@ -36,8 +43,8 @@ function writeRecords(fileName, marcWriter, callback) {
 
 function readRecord(marcReader, recNo, callback) {
   marcReader.next(function (err, record) {
-    assert(!err && record.equals(data.records[recNo]));
-    if (recNo + 1 === data.records.length) {
+    assert(!err && record.equals(records[recNo]));
+    if (recNo + 1 === records.length) {
       return callback(null);
     }
     setImmediate(readRecord, marcReader, recNo + 1, callback);

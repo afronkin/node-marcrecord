@@ -6,8 +6,6 @@ try {
   var marcrecord = require('..');
 }
 
-var data = require('./data');
-
 var MarcRecord = marcrecord.MarcRecord;
 var MarcVariableField = marcrecord.MarcVariableField;
 var MarcControlField = marcrecord.MarcControlField;
@@ -20,79 +18,112 @@ var MarcSubfield = marcrecord.MarcSubfield;
 var record = new MarcRecord();
 assert(record.leader.length === 24 && record.fields.length === 0);
 
-var record = new MarcRecord(data.records[0]);
-assert(record.fields.length === 4);
-
 var fields = [
   new MarcControlField('001', 'ID1'),
   new MarcControlField('005', '20160101102030.1')
 ];
 var record = new MarcRecord(fields);
-assert(record.fields.length === 2);
+assert(record.fields.length === 2
+  && record.fields[0].tag === '001' && record.fields[0].data === 'ID1');
+
+/*
+ * MarcRecord.parse()
+ * MarcRecord.parseJson()
+ * MarcRecord.parseText()
+ */
+var record = new MarcRecord([
+  new MarcControlField('001', 'ID1'),
+  new MarcDataField('111', '2', '3', [
+    new MarcSubfield('a', 'AAA'),
+    new MarcSubfield('b', 'BBB')
+  ]),
+  new MarcDataField('222', '3', '4', [
+    new MarcSubfield('c', 'CCC'),
+    new MarcSubfield('d', 'DDD')
+  ]),
+  new MarcDataField('444', '5', '6', [
+    new MarcSubfield('1', new MarcControlField('001', 'ID2')),
+    new MarcSubfield('1', new MarcDataField('100', '2', '3', [
+      new MarcSubfield('x', 'XXX'),
+      new MarcSubfield('y', 'YYY')
+    ]))
+  ])
+]);
+var textRecord = '000      nam  22        450 \n'
+  + '001 ID1\n'
+  + '111 23$aAAA$bBBB\n'
+  + '222 34$cCCC$dDDD\n'
+  + '444 56$1001ID2$110023$xXXX$yYYY';
+
+assert(record.equals(MarcRecord.parse(record)));
+assert(record.equals(MarcRecord.parse(JSON.stringify(record))));
+assert(record.equals(MarcRecord.parse(textRecord)));
+assert(record.equals(MarcRecord.parseJson(record)));
+assert(record.equals(MarcRecord.parseText(textRecord)));
 
 /*
  * MarcRecord.clone()
  */
-var record = MarcRecord.clone(data.records[0]);
-assert(record !== data.records[0] && record.equals(data.records[0]));
+var record = MarcRecord.parse('000      nam  22        450 \n'
+  + '001 ID1\n'
+  + '111 23$aAAA$bBBB\n'
+  + '222 34$cCCC$dDDD\n'
+  + '444 56$1001ID2$110023$xXXX$yYYY');
+var recordClone = record.clone();
+assert(recordClone !== record && recordClone.equals(record));
 assert(MarcRecord.clone({}) === null);
-var record = data.records[0].clone();
-assert(record !== data.records[0] && record.equals(data.records[0]));
 
 /*
  * MarcRecord.equals()
  */
-assert(data.records[0].equals(data.records[0]));
-assert(data.records[0].equals(data.records[0], {ignoreOrder: true}));
-assert(!data.records[0].equals(data.records[1]));
-assert(!data.records[0].equals(data.records[1], {ignoreOrder: true}));
-assert(!data.records[1].equals(data.records[2]));
+var record1 = MarcRecord.parse('001 ID1\n111 23$aAAA$bBBB');
+var record2 = MarcRecord.parse('111 23$bBBB$aAAA\n001 ID1');
+var record3 = MarcRecord.parse('111 23$bbBb$aAaA\n001 ID1');
+var record4 = MarcRecord.parse('001 ID1\n444 56$1001ID2$110023$xXXX$yYYY');
+var record5 = MarcRecord.parse('444 56$110023$yYYY$xXXX$1001ID2\n001 ID1');
 
-assert(MarcRecord.equals(data.records[0], data.records[0]));
-assert(MarcRecord.equals(data.records[0], data.records[0],
-  {ignoreOrder: true}));
-assert(!MarcRecord.equals(data.records[0], data.records[1]));
-assert(!MarcRecord.equals(data.records[0], data.records[1],
-  {ignoreOrder: true}));
-assert(!MarcRecord.equals(data.records[1], data.records[2]));
-assert(MarcRecord.equals(data.records[1], data.records[2],
-  {ignoreOrder: true}));
+assert(record1.equals(record1));
+assert(record1.equals(record1.clone()));
 
-assert(MarcRecord.equals(data.records[0].getVariableFields(),
-  data.records[0]));
-assert(!MarcRecord.equals(data.records[0],
-  data.records[0].getDataFields()));
-assert(MarcRecord.equals(data.records[0].getVariableFields('900'),
-  data.records[0].getVariableFields('900')));
-assert(MarcRecord.equals(data.records[1].getVariableFields(),
-  data.records[2].getVariableFields(), {ignoreOrder: true}));
+assert(!record1.equals(record2));
+assert(record1.equals(record2, {ignoreOrder: true}));
+
+assert(!record2.equals(record3));
+assert(record2.equals(record3, {ignoreCase: true}));
+assert(record1.equals(record3, {ignoreOrder: true, ignoreCase: true}));
+
+assert(record4.equals(record4.clone()));
+assert(!record4.equals(record5));
+assert(record4.equals(record5, {ignoreOrder: true}));
 
 /*
  * MarcRecord.size()
  */
-assert(data.records[0].size() === 4);
-assert(data.records[1].size() === 2);
-assert(data.records[2].size() === 2);
+var record1 = new MarcRecord();
+var record2 = MarcRecord.parse('001 ID1');
+var record3 = MarcRecord.parse('001 ID1\n111 23$aAAA$bBBB');
+assert(record1.size() === 0 && record2.size() === 1 && record3.size() === 2);
 
 /*
  * MarcRecord.empty()
  */
-assert(!data.records[0].empty());
-assert((new MarcRecord()).empty());
+var record1 = new MarcRecord();
+var record2 = MarcRecord.parse('001 ID1');
+assert(record1.empty() && !record2.empty());
 
 /*
  * MarcRecord.clear()
  */
-var record = new MarcRecord(data.records[0]);
+var record = MarcRecord.parse('001 ID1');
 record.clear();
 assert(record.fields.length === 0);
 
 /*
  * MarcRecord.trim()
  */
-var record = new MarcRecord(data.records[3]);
+var record = MarcRecord.parse('001 ID1\n005 \n111 23$aAAA$b$cCCC$d');
 record.trim();
-assert(record.fields.length === 2);
+assert(record.fields.length === 2 && record.fields[1].subfields.length === 2);
 
 /*
  * MarcRecord.addVariableField()
@@ -100,14 +131,14 @@ assert(record.fields.length === 2);
 var record = new MarcRecord();
 record.addVariableField(new MarcControlField('001', 'ID1'));
 record.addVariableField(
-  new MarcDataField('200', [new MarcSubfield('a', 'Title')]));
+  new MarcDataField('200', [new MarcSubfield('a', 'AAA')]));
 assert(record.fields.length === 2);
 
 /*
  * MarcRecord.removeVariableFields()
  */
-var record = new MarcRecord(data.records[0]);
-record.removeVariableFields(record.getVariableFields('900'));
+var record = MarcRecord.parse('001 ID1\n111 23$aAAA$bBBB\n222 34$cCCC$dDDD');
+record.removeVariableFields(record.getVariableFields('111'));
 assert(record.fields.length === 2);
 record.removeVariableFields([1]);
 assert(record.fields.length === 1);
@@ -117,103 +148,116 @@ assert(record.fields.length === 0);
 /*
  * MarcRecord.removeVariableField()
  */
-var record = new MarcRecord(data.records[0]);
+var record = MarcRecord.parse('001 ID1\n111 23$aAAA$bBBB\n222 34$cCCC$dDDD');
 record.removeVariableField(record.fields[0]);
-assert(record.fields.length === 3);
-record.removeVariableField(1);
 assert(record.fields.length === 2);
-record.removeVariableField(record.fields[1]);
+record.removeVariableField(1);
 assert(record.fields.length === 1);
+record.removeVariableField(record.fields[0]);
+assert(record.fields.length === 0);
 
 /*
  * MarcRecord.getVariableFields()
  */
-assert(data.records[0].getVariableFields().length === 4);
-assert(data.records[0].getVariableFields('001').length === 1);
-assert(data.records[0].getVariableFields('900').length === 2);
-assert(data.records[0].getVariableFields('555').length === 0);
-assert(data.records[0].getVariableFields(/^9..$/).length === 3);
-assert(data.records[0].getVariableFields(/^5..$/).length === 0);
-assert(data.records[0].getVariableFields(['950', '001']).length === 2);
-assert(data.records[0].getVariableFields([/^9/, '001', /^0/]).length === 4);
-assert(data.records[0].getVariableFields(['007', /^5/]).length === 0);
+var record = MarcRecord.parse(
+  '001 ID1\n111 23$aAAA$bBBB\n111 23$cCCC$dDDD\n122 34$eEEE$fFFF');
+assert(record.getVariableFields().length === 4);
+assert(record.getVariableFields('001').length === 1);
+assert(record.getVariableFields('111').length === 2);
+assert(record.getVariableFields('333').length === 0);
+assert(record.getVariableFields(/^1..$/).length === 3);
+assert(record.getVariableFields(/^3..$/).length === 0);
+assert(record.getVariableFields(['122', '001']).length === 2);
+assert(record.getVariableFields([/^12/, '001', /^0/]).length === 2);
+assert(record.getVariableFields(['007', /^3/]).length === 0);
 
 /*
  * MarcRecord.getVariableField()
  */
-assert(data.records[0].getVariableField().tag === '001');
-assert(data.records[0].getVariableField('001').tag === '001');
-assert(data.records[0].getVariableField('900').tag === '900');
-assert(data.records[0].getVariableField('555') === null);
-assert(data.records[0].getVariableField(/^9..$/).tag === '950');
-assert(data.records[0].getVariableField(/^5..$/) === null);
-assert(data.records[0].getVariableField(['950', '001']).tag === '001');
-assert(data.records[0].getVariableField([/^9/, '001', /^0/]).tag === '001');
-assert(data.records[0].getVariableField(['007', /^5/]) === null);
+var record = MarcRecord.parse(
+  '001 ID1\n111 23$aAAA$bBBB\n111 23$cCCC$dDDD\n122 34$eEEE$fFFF');
+assert(record.getVariableField().tag === '001');
+assert(record.getVariableField('001').tag === '001');
+assert(record.getVariableField('111').tag === '111');
+assert(record.getVariableField('333') === null);
+assert(record.getVariableField(/^1..$/).tag === '111');
+assert(record.getVariableField(/^3..$/) === null);
+assert(record.getVariableField(['122', '001']).tag === '001');
+assert(record.getVariableField([/^12/, '001', /^0/]).tag === '001');
+assert(record.getVariableField(['007', /^3/]) === null);
 
 /*
  * MarcRecord.getControlFields()
  */
-assert(data.records[0].getControlFields().length === 1);
-assert(data.records[0].getControlFields('001').length === 1);
-assert(data.records[0].getControlFields('005').length === 0);
-assert(data.records[0].getControlFields('900').length === 0);
-assert(data.records[0].getControlFields(/^0../).length === 1);
-assert(data.records[0].getControlFields(/^005/).length === 0);
-assert(data.records[0].getControlFields(['005', '001']).length === 1);
-assert(data.records[0].getControlFields([/^005/, '001', /^0/]).length === 1);
-assert(data.records[0].getControlFields(['007', /^005/]).length === 0);
+var record = MarcRecord.parse('001 ID1\n005 20160101102030.1\n111 23$aAAA');
+assert(record.getControlFields().length === 2);
+assert(record.getControlFields('001').length === 1);
+assert(record.getControlFields('007').length === 0);
+assert(record.getControlFields('111').length === 0);
+assert(record.getControlFields(/^0../).length === 2);
+assert(record.getControlFields(/^007/).length === 0);
+assert(record.getControlFields(['005', '001']).length === 2);
+assert(record.getControlFields([/^005/, '001', /^0/]).length === 2);
+assert(record.getControlFields(['007', /^008/]).length === 0);
 
 /*
  * MarcRecord.getDataFields()
  */
-assert(data.records[0].getDataFields().length === 3);
-assert(data.records[0].getDataFields('900').length === 2);
-assert(data.records[0].getDataFields('555').length === 0);
-assert(data.records[0].getDataFields('001').length === 0);
-assert(data.records[0].getDataFields(/^9..$/).length === 3);
-assert(data.records[0].getDataFields(/^5..$/).length === 0);
-assert(data.records[0].getDataFields(['950', '001']).length === 1);
-assert(data.records[0].getDataFields([/^9/, '001', /^0/]).length === 3);
-assert(data.records[0].getDataFields(['007', /^5/]).length === 0);
+var record = MarcRecord.parse(
+  '001 ID1\n111 23$aAAA$bBBB\n111 23$cCCC$dDDD\n122 34$eEEE$fFFF');
 
-assert(data.records[0].getDataFields('950', '3').length === 1);
-assert(data.records[0].getDataFields('950', '3', '4').length === 1);
-assert(data.records[0].getDataFields('950', '1', '1').length === 0);
-assert(data.records[0].getDataFields(/^9../, '1', '2').length === 1);
+assert(record.getDataFields().length === 3);
+assert(record.getDataFields('111').length === 2);
+assert(record.getDataFields('333').length === 0);
+assert(record.getDataFields('001').length === 0);
+assert(record.getDataFields(/^1..$/).length === 3);
+assert(record.getDataFields(/^3..$/).length === 0);
+assert(record.getDataFields(['122', '001']).length === 1);
+assert(record.getDataFields([/^1/, '001', /^0/]).length === 3);
+assert(record.getDataFields(['007', /^3/]).length === 0);
+
+assert(record.getDataFields('122', '3').length === 1);
+assert(record.getDataFields('122', '3', '4').length === 1);
+assert(record.getDataFields('122', '1', '1').length === 0);
+assert(record.getDataFields(/^1../, '2', '3').length === 2);
 
 /*
  * MarcRecord.getControlFieldData()
  */
-assert(data.records[0].getControlFieldData() === 'ID/1');
-assert(data.records[0].getControlFieldData('001') === 'ID/1');
-assert(data.records[0].getControlFieldData('005') === null);
-assert(data.records[0].getControlFieldData('900') === null);
-assert(data.records[0].getControlFieldData(/^0../) === 'ID/1');
-assert(data.records[0].getControlFieldData(/^005/) === null);
-assert(data.records[0].getControlFieldData(['005', '001']) === 'ID/1');
-assert(data.records[0].getControlFieldData([/^005/, '001', /^0/]) === 'ID/1');
-assert(data.records[0].getControlFieldData(['007', /^005/]) === null);
+var record = MarcRecord.parse('001 ID1\n005 20160101102030.1\n111 23$aAAA');
+assert(record.getControlFieldData() === 'ID1');
+assert(record.getControlFieldData('001') === 'ID1');
+assert(record.getControlFieldData('007') === null);
+assert(record.getControlFieldData('111') === null);
+assert(record.getControlFieldData(/^0../) === 'ID1');
+assert(record.getControlFieldData(/^007/) === null);
+assert(record.getControlFieldData(['005', '001']) === 'ID1');
+assert(record.getControlFieldData([/^005/, '001', /^0/]) === 'ID1');
+assert(record.getControlFieldData(['007', /^008/]) === null);
 
 /*
  * MarcRecord.getControlNumber()
  */
-assert(data.records[0].getControlNumber() === 'ID/1');
-assert(data.records[1].getControlNumber() === 'ID/2');
+var record1 = MarcRecord.parse('001 ID1\n111 23$aAAA');
+var record2 = MarcRecord.parse('222 34$bBBB\n001 ID2');
+assert(record1.getControlNumber() === 'ID1');
+assert(record2.getControlNumber() === 'ID2');
 assert((new MarcRecord()).getControlNumber() === null);
 
 /*
  * MarcRecord.getSubfield()
  */
-assert(data.records[0].getSubfield('900', 'a').data === 'A');
-assert(data.records[0].getSubfield('555', 'a') === null);
-assert(data.records[0].getSubfield(/^9../, 'b').data === 'B');
-assert(data.records[0].getSubfield(/^9../, 'a') === null);
-assert(data.records[0].getSubfield(['555', /^9../], 'c').data === 'C');
-assert(data.records[0].getSubfield('950', ['a', 'b', 'c']).data === 'C');
-assert(data.records[0].getSubfield('950').data === 'C');
+var record = MarcRecord.parse(
+  '001 ID1\n111 23$aAAA$bBBB\n111 23$cCCC$dDDD\n122 34$eEEE$fFFF');
+assert(record.getSubfield('111', 'a').data === 'AAA');
+assert(record.getSubfield('333', 'a') === null);
+assert(record.getSubfield(/^1../, 'b').data === 'BBB');
+assert(record.getSubfield(/^12./, 'a') === null);
+assert(record.getSubfield(['333', /^12./], 'e').data === 'EEE');
+assert(record.getSubfield('122', ['a', 'c', 'e']).data === 'EEE');
+assert(record.getSubfield('122').data === 'EEE');
 try {
-  data.records[0].getSubfield(null, 'a');
+  record.getSubfield(null, 'a');
 } catch (err) {
   assert(err.message === 'tags must be specified');
 }
@@ -221,15 +265,17 @@ try {
 /*
  * MarcRecord.getSubfieldData()
  */
-assert(data.records[0].getSubfieldData('900', 'a') === 'A');
-assert(data.records[0].getSubfieldData('555', 'a') === null);
-assert(data.records[0].getSubfieldData(/^9../, 'b') === 'B');
-assert(data.records[0].getSubfieldData(/^9../, 'a') === null);
-assert(data.records[0].getSubfieldData(['555', /^9../], 'c') === 'C');
-assert(data.records[0].getSubfieldData('950', ['a', 'b', 'c']) === 'C');
-assert(data.records[0].getSubfieldData('950') === 'C');
+var record = MarcRecord.parse(
+  '001 ID1\n111 23$aAAA$bBBB\n111 23$cCCC$dDDD\n122 34$eEEE$fFFF');
+assert(record.getSubfieldData('111', 'a') === 'AAA');
+assert(record.getSubfieldData('333', 'a') === null);
+assert(record.getSubfieldData(/^1../, 'b') === 'BBB');
+assert(record.getSubfieldData(/^12./, 'a') === null);
+assert(record.getSubfieldData(['333', /^12./], 'e') === 'EEE');
+assert(record.getSubfieldData('122', ['a', 'c', 'e']) === 'EEE');
+assert(record.getSubfieldData('122') === 'EEE');
 try {
-  data.records[0].getSubfieldData(null, 'a');
+  record.getSubfieldData(null, 'a');
 } catch (err) {
   assert(err.message === 'tags must be specified');
 }
@@ -237,16 +283,18 @@ try {
 /*
  * MarcRecord.getRegularSubfield()
  */
-assert(data.records[0].getRegularSubfield('900', 'a').data === 'A');
-assert(data.records[0].getRegularSubfield('900', null, /^A/).data === 'A');
-assert(data.records[0].getRegularSubfield(
-  /^9../, ['b', 'c'], /^B/).data === 'B');
-assert(data.records[0].getRegularSubfield('555', null, /^A/) === null);
-assert(data.records[0].getRegularSubfield(
-  '950', ['a', 'b', 'c', '1']).data === 'C');
-assert(data.records[0].getRegularSubfield(/^9../, 'a') === null);
+var record = MarcRecord.parse(
+  '001 ID1\n111 23$aAAA$bBBB\n111 23$cCCC$dDDD\n122 34$eEEE$fFFF');
+assert(record.getRegularSubfield('111', 'a').data === 'AAA');
+assert(record.getRegularSubfield('111', null, /^A/).data === 'AAA');
+assert(record.getRegularSubfield(
+  /^1../, ['b', 'c'], /^B/).data === 'BBB');
+assert(record.getRegularSubfield('333', null, /^A/) === null);
+assert(record.getRegularSubfield(
+  '122', ['a', 'c', 'e', '1']).data === 'EEE');
+assert(record.getRegularSubfield(/^12./, 'a') === null);
 try {
-  data.records[0].getRegularSubfield(null, null, /^A/);
+  record.getRegularSubfield(null, null, /^A/);
 } catch (err) {
   assert(err.message === 'tags must be specified');
 }
@@ -254,16 +302,18 @@ try {
 /*
  * MarcRecord.getRegularSubfieldData()
  */
-assert(data.records[0].getRegularSubfieldData('900', 'a') === 'A');
-assert(data.records[0].getRegularSubfieldData('900', null, /^A/) === 'A');
-assert(data.records[0].getRegularSubfieldData(
-  /^9../, ['b', 'c'], /^B/) === 'B');
-assert(data.records[0].getRegularSubfieldData('555', null, /^A/) === null);
-assert(data.records[0].getRegularSubfieldData(
-  '950', ['a', 'b', 'c', '1']) === 'C');
-assert(data.records[0].getRegularSubfieldData(/^9../, 'a') === null);
+var record = MarcRecord.parse(
+  '001 ID1\n111 23$aAAA$bBBB\n111 23$cCCC$dDDD\n122 34$eEEE$fFFF');
+assert(record.getRegularSubfieldData('111', 'a') === 'AAA');
+assert(record.getRegularSubfieldData('111', null, /^A/) === 'AAA');
+assert(record.getRegularSubfieldData(
+  /^1../, ['b', 'c'], /^B/) === 'BBB');
+assert(record.getRegularSubfieldData('333', null, /^A/) === null);
+assert(record.getRegularSubfieldData(
+  '122', ['a', 'c', 'e', '1']) === 'EEE');
+assert(record.getRegularSubfieldData(/^12./, 'a') === null);
 try {
-  data.records[0].getRegularSubfieldData(null, null, /^A/);
+  record.getRegularSubfieldData(null, null, /^A/);
 } catch (err) {
   assert(err.message === 'tags must be specified');
 }
@@ -271,7 +321,8 @@ try {
 /*
  * MarcRecord.getLeader()
  */
-assert(data.records[0].getLeader() === data.records[0].leader);
+var record = MarcRecord.parse('000      nam  22        450 \n001 ID1');
+assert(record.getLeader() === record.leader);
 
 /*
  * MarcRecord.setLeader()
@@ -283,30 +334,35 @@ assert(record.getLeader() === '12345');
 /*
  * MarcRecord.sort()
  */
-var record = new MarcRecord(data.records[1]);
+var record = MarcRecord.parse(
+  '222 45$cCCC\n001 ID1\n111 23$bBBB\n111 34$aAAA');
 record.sort();
-assert(record.fields[0].tag === '001');
-
-/*
- * MarcRecord.parse()
- */
-var jsonRecord = JSON.stringify(data.records[0]);
-assert(data.records[0].equals(MarcRecord.parse(jsonRecord)));
-assert(data.records[0].equals(MarcRecord.parse(JSON.parse(jsonRecord))));
+assert(record.fields[0].tag === '001'
+  && record.fields[1].tag === '111' && record.fields[1].ind1 === '2'
+  && record.fields[2].tag === '111' && record.fields[2].ind1 === '3'
+  && record.fields[3].tag === '222');
 
 /*
  * MarcRecord.toString()
  */
-assert(data.records[0].toString().split('\n').length === 5);
+var textRecord = '000 12345nam  22#####   450 \n'
+  + '001 ID1\n'
+  + '123 45$aABC$bBBB\n'
+  + '321 54$cCCC$dDDD';
+var record = MarcRecord.parseText(textRecord);
+assert(record.toString() === textRecord);
 
 /*
  * MarcRecord.toEmbeddedFields()
  */
-var embeddedFields = data.records[0].toEmbeddedFields();
+var record = MarcRecord.parse(
+  '001 ID1\n111 23$aAAA$bBBB\n111 23$cCCC$dDDD\n122 34$eEEE$fFFF');
+
+var embeddedFields = record.toEmbeddedFields();
 assert(embeddedFields.length === 4
   && embeddedFields.every(function (v) { return v.isEmbeddedField(); }));
 
-var fields = data.records[0].getVariableFields('900');
+var fields = record.getVariableFields('111');
 var embeddedFields = MarcRecord.toEmbeddedFields(fields);
 assert(embeddedFields.length === 2
   && embeddedFields.every(function (v) { return v.isEmbeddedField(); }));
