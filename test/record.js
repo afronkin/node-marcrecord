@@ -204,9 +204,9 @@ assert(record.getControlFields(['007', /^008/]).length === 0);
  * MarcRecord.getDataFields()
  */
 var record = MarcRecord.parse(
-  '001 ID1\n111 23$aAAA$bBBB\n111 23$cCCC$dDDD\n122 34$eEEE$fFFF');
+  '001 ID1\n111 23$aAAA$bBBB\n111 23$cCCC$dDDD\n122 34$eEEE$fFFF\n234 #1$xX');
 
-assert(record.getDataFields().length === 3);
+assert(record.getDataFields().length === 4);
 assert(record.getDataFields('111').length === 2);
 assert(record.getDataFields('333').length === 0);
 assert(record.getDataFields('001').length === 0);
@@ -220,6 +220,11 @@ assert(record.getDataFields('122', '3').length === 1);
 assert(record.getDataFields('122', '3', '4').length === 1);
 assert(record.getDataFields('122', '1', '1').length === 0);
 assert(record.getDataFields(/^1../, '2', '3').length === 2);
+
+assert(record.getDataFields('234', '#', '1').length === 1);
+assert(record.getDataFields('234', ' ', '1').length === 0);
+assert(record.getDataFields('234', ' ', '1',
+  {normalizeIndicators: true}).length === 1);
 
 /*
  * MarcRecord.getControlFieldData()

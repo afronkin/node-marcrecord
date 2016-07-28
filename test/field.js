@@ -291,6 +291,11 @@ assert(MarcDataField.equals(field1, field4,
   {ignoreOrder: true, ignoreCase: true}));
 assert(!MarcDataField.equals(field1, field5));
 
+var field1 = MarcVariableField.parse('111 #1$aAAA$bBBB');
+var field2 = MarcVariableField.parse('111  1$aAAA$bBBB');
+assert(!MarcDataField.equals(field1, field2));
+assert(MarcDataField.equals(field1, field2, {normalizeIndicators: true}));
+
 /*
  * MarcDataField.size()
  */
