@@ -381,8 +381,10 @@ assert(field.getRegularSubfields().length === 3);
 assert(field.getRegularSubfields(null, /^BBB/).length === 1);
 assert(field.getRegularSubfields(null, /[CZ]/).length === 1);
 assert(field.getRegularSubfields(null, /^(BBB|CCC|ZZZ)$/).length === 2);
+assert(field.getRegularSubfields(null, 'BBB').length === 1);
 assert(field.getRegularSubfields('b', /^[BC]/).length === 1);
 assert(field.getRegularSubfields(['b', 'c'], /^[C]/).length === 1);
+assert(field.getRegularSubfields('c', 'CCC').length === 1);
 assert(field.getRegularSubfields('z').length === 0);
 assert(field.getRegularSubfields('1', /[BCZ]/).length === 0);
 
@@ -394,8 +396,10 @@ assert(field.getRegularSubfield().data === 'AAA');
 assert(field.getRegularSubfield(null, /^BBB/).data === 'BBB');
 assert(field.getRegularSubfield(null, /[CZ]/).data === 'CCC');
 assert(field.getRegularSubfield(null, /^(BBB|CCC|ZZZ)$/).data === 'BBB');
+assert(field.getRegularSubfield(null, 'BBB').data === 'BBB');
 assert(field.getRegularSubfield('b', /^[BC]/).data === 'BBB');
 assert(field.getRegularSubfield(['b', 'c'], /^[C]/).data === 'CCC');
+assert(field.getRegularSubfield('c', 'CCC').data === 'CCC');
 assert(field.getRegularSubfield('z') === null);
 assert(field.getRegularSubfield('1', /[BCZ]/) === null);
 
@@ -407,8 +411,10 @@ assert(field.getRegularSubfieldData() === 'AAA');
 assert(field.getRegularSubfieldData(null, /^BBB/) === 'BBB');
 assert(field.getRegularSubfieldData(null, /[CZ]/) === 'CCC');
 assert(field.getRegularSubfieldData(null, /^(BBB|CCC|ZZZ)$/) === 'BBB');
+assert(field.getRegularSubfieldData(null, 'BBB') === 'BBB');
 assert(field.getRegularSubfieldData('b', /^[BC]/) === 'BBB');
 assert(field.getRegularSubfieldData(['b', 'c'], /^[C]/) === 'CCC');
+assert(field.getRegularSubfieldData('c', 'CCC') === 'CCC');
 assert(field.getRegularSubfieldData('z') === null);
 assert(field.getRegularSubfieldData('1', /[BCZ]/) === null);
 
