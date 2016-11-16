@@ -348,6 +348,26 @@ assert(record.fields[0].tag === '001'
   && record.fields[3].tag === '222');
 
 /*
+ * MarcRecord.walk()
+ */
+var record1 = MarcRecord.parse('000      nam  22        450 \n'
+  + '001 ID1\n'
+  + '111 23$aAAA$bBBB\n'
+  + '222 34$cCCC$dDDD\n'
+  + '444 56$1001ID2$110023$xXXX$yYYY');
+var record2 = MarcRecord.parse('000      nam  22        450 \n'
+  + '001 ID*\n'
+  + '111 23$aAAA$b***\n'
+  + '222 34$c***$dDDD\n'
+  + '444 56$1001ID*$110023$x***$yYYY');
+record1.walk(function (item) {
+  if (typeof(item.data) === 'string') {
+    item.data = item.data.replace(/[12BCX]/g, '*');
+  }
+});
+assert(record1.equals(record2));
+
+/*
  * MarcRecord.toString()
  */
 var textRecord = '000 12345nam  22#####   450 \n'

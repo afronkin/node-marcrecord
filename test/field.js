@@ -576,6 +576,27 @@ field.sort();
 assert(field.subfields[0].code === 'a' && field.subfields[1].code === 'b');
 
 /*
+ * MarcDataField.walk()
+ */
+var field1 = MarcVariableField.parse('111 23$aAAA$bBBB');
+var field2 = MarcVariableField.parse('111 23$aAAA$b***');
+field1.walk(function (item) {
+  if (typeof(item.data) === 'string') {
+    item.data = item.data.replace(/[B]/g, '*');
+  }
+});
+assert(field1.equals(field2));
+
+var field1 = MarcVariableField.parse('444 56$1001ID2$110023$xXXX$yYYY');
+var field2 = MarcVariableField.parse('444 56$1001ID*$110023$x***$yYYY');
+field1.walk(function (item) {
+  if (typeof(item.data) === 'string') {
+    item.data = item.data.replace(/[2X]/g, '*');
+  }
+});
+assert(field1.equals(field2));
+
+/*
  * MarcDataField.toString()
  */
 var field = MarcVariableField.parse('111 23$aAAA$bBBB$cCCC');
