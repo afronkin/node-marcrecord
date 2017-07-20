@@ -680,6 +680,14 @@ var subfieldClone = MarcSubfield.clone({});
 assert(subfieldClone === null);
 
 /*
+ * MarcSubfield.assign()
+ */
+var subfield1 = new MarcSubfield('a', 'AAA');
+var subfield2 = new MarcSubfield('a', 'AAA2');
+subfield1.assign(subfield2);
+assert(subfield1 !== subfield2 && subfield1.equals(subfield2));
+
+/*
  * MarcSubfield.equals()
  */
 var subfield1 = new MarcSubfield('a', 'AAA');
