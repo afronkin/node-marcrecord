@@ -175,6 +175,14 @@ var fieldClone = field.clone();
 assert(fieldClone !== field && fieldClone.equals(field));
 
 /*
+ * MarcControlField.assign()
+ */
+var field1 = MarcVariableField.parse('001 ID1');
+var field2 = MarcVariableField.parse('001 ID2');
+field1.assign(field2);
+assert(field1 !== field2 && field1.equals(field2));
+
+/*
  * MarcControlField.equals()
  */
 var field1 = MarcVariableField.parse('001 ID1');
@@ -257,6 +265,14 @@ assert(fieldClone !== field && fieldClone.equals(field));
 
 var fieldClone = MarcDataField.clone({});
 assert(fieldClone === null);
+
+/*
+ * MarcDataField.assign()
+ */
+var field1 = MarcVariableField.parse('111 23$aAAA$bBBB');
+var field2 = MarcVariableField.parse('111 23$aAAA$bBBBC');
+field1.assign(field2);
+assert(field1 !== field2 && field1.equals(field2));
 
 /*
  * MarcDataField.equals()

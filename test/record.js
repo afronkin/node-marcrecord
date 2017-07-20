@@ -74,6 +74,14 @@ assert(recordClone !== record && recordClone.equals(record));
 assert(MarcRecord.clone({}) === null);
 
 /*
+ * MarcRecord.assign()
+ */
+var record1 = MarcRecord.parse('001 ID1\n111 23$aAAA$bBBB');
+var record2 = MarcRecord.parse('111 23$bBBB$aAAA\n001 ID1');
+record1.assign(record2);
+assert(record1 !== record2 && record1.equals(record2));
+
+/*
  * MarcRecord.equals()
  */
 var record1 = MarcRecord.parse('001 ID1\n111 23$aAAA$bBBB');
