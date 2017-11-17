@@ -376,6 +376,23 @@ try {
 }
 
 /*
+ * MarcRecord.findSubfields()
+ */
+var record = MarcRecord.parse(
+  '001 ID1\n111 23$aAAA$bBBB\n111 24$cCCC$dDDD\n122 34$eEEE$fFFF');
+assert(record.findSubfields('111', null, null, 'a').length === 1);
+assert(record.findSubfields('111', null, null, ['a', 'b', 'c']).length === 3);
+assert(record.findSubfields('111', '2', null, ['a', 'b', 'c']).length === 3);
+assert(record.findSubfields('111', '2', '3', ['a', 'b', 'c']).length === 2);
+assert(record.findSubfields('111', null, null, ['a', 'b', 'c'], 'AAA').length === 1);
+assert(record.findSubfields('111', null, null, ['a', 'b', 'c'], /AAA|CCC/).length === 2);
+try {
+  record.findSubfields(null, null, null, 'a');
+} catch (err) {
+  assert(err.message === 'tags must be specified');
+}
+
+/*
  * MarcRecord.getLeader()
  */
 var record = MarcRecord.parse('000      nam  22        450 \n001 ID1');
