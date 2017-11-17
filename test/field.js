@@ -457,6 +457,18 @@ assert(field.findSubfield(new MarcSubfield('c', 'cAcAc'),
   {ignoreCase: true, ignoreChars: /[A]/g}).data === 'CCC');
 
 /*
+ * MarcDataField.addSubfields()
+ */
+var field = new MarcDataField('111', '2', '3');
+field.addSubfields([new MarcSubfield('a', 'AAA'), new MarcSubfield('b', 'BBB')]);
+assert(field.subfields.length === 2 && field.subfields[0].data === 'AAA'
+  && field.subfields[1].data === 'BBB');
+field.addSubfields(1,
+  [new MarcSubfield('c', 'CCC'), new MarcSubfield('d', 'DDD')]);
+assert(field.subfields.length === 4 && field.subfields[1].data === 'CCC'
+  && field.subfields[2].data === 'DDD');
+
+/*
  * MarcDataField.addSubfield()
  */
 var field = new MarcDataField('111', '2', '3');
