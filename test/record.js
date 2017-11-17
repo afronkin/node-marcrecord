@@ -332,6 +332,38 @@ try {
 }
 
 /*
+ * MarcRecord.findControlFields()
+ */
+var record = MarcRecord.parse(
+  '001 ID1\n005 20160101102030.1\n111 23$aAAA$bBBB');
+assert(record.findControlFields('005', /^2016/).length === 1);
+assert(record.findControlFields(/^00./).length === 2);
+assert(record.findControlFields(['001', '005'], /.*1.*/).length === 2);
+assert(record.findControlFields('111').length === 0);
+try {
+  record.findControlFields(null, /^2016/);
+} catch (err) {
+  assert(err.message === 'tags must be specified');
+}
+
+/*
+ * MarcRecord.findDataFields()
+ */
+var record = MarcRecord.parse(
+  '001 ID1\n111 23$aAAA$bBBB\n111 24$cCCC$dDDD\n122 34$eEEE$fFFF');
+assert(record.findDataFields('111', null, null, 'a').length === 1);
+assert(record.findDataFields('111', null, null, ['a', 'c']).length === 2);
+assert(record.findDataFields('111', '2', null, ['a', 'c']).length === 2);
+assert(record.findDataFields('111', '2', '3', ['a', 'c']).length === 1);
+assert(record.findDataFields('111', null, null, ['a', 'c'], 'AAA').length === 1);
+assert(record.findDataFields('111', null, null, ['a', 'c'], /AAA|CCC/).length === 2);
+try {
+  record.findDataFields(null, null, null, 'a');
+} catch (err) {
+  assert(err.message === 'tags must be specified');
+}
+
+/*
  * MarcRecord.getLeader()
  */
 var record = MarcRecord.parse('000      nam  22        450 \n001 ID1');
