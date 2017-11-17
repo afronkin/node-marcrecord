@@ -139,7 +139,19 @@ assert(record.fields.length === 2 && record.fields[1].subfields.length === 2);
 var record = new MarcRecord();
 record.addVariableField(new MarcControlField('001', 'ID1'));
 record.addVariableField(
-  new MarcDataField('200', [new MarcSubfield('a', 'AAA')]));
+  new MarcDataField('200', ' ', ' ', [new MarcSubfield('a', 'AAA')]));
+assert(record.fields.length === 2);
+
+/*
+ * MarcRecord.addNonEmptyVariableField()
+ */
+var record = new MarcRecord();
+record.addNonEmptyVariableField(new MarcControlField('001', 'ID1'));
+record.addNonEmptyVariableField(new MarcControlField('005', ''));
+record.addNonEmptyVariableField(new MarcControlField('007', null));
+record.addNonEmptyVariableField(
+  new MarcDataField('200', ' ', ' ', [new MarcSubfield('a', 'AAA')]));
+record.addNonEmptyVariableField(new MarcDataField('200'));
 assert(record.fields.length === 2);
 
 /*

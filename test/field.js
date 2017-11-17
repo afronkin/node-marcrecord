@@ -468,6 +468,17 @@ field.addSubfield(0, new MarcSubfield('c', 'CCC'));
 assert(field.subfields.length === 3 && field.subfields[0].data === 'CCC');
 
 /*
+ * MarcDataField.addNonEmptySubfield()
+ */
+var field = new MarcDataField('111', '2', '3');
+field.addNonEmptySubfield(new MarcSubfield('a', 'AAA'));
+assert(field.subfields.length === 1 && field.subfields[0].data === 'AAA');
+field.addNonEmptySubfield(new MarcSubfield('b', ''));
+assert(field.subfields.length === 1);
+field.addNonEmptySubfield(new MarcSubfield('c', null));
+assert(field.subfields.length === 1);
+
+/*
  * MarcDataField.removeSubfields()
  */
 var field = MarcVariableField.parse('111 23$aAAA$bBBB$cCCC');
