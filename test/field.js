@@ -267,6 +267,22 @@ var fieldClone = MarcDataField.clone({});
 assert(fieldClone === null);
 
 /*
+ * MarcDataField.cloneSubfields()
+ */
+var field = MarcVariableField.parse('111 23$aAAA$bBBB$cCCC');
+var subfields = field.getSubfields(['b', 'c']);
+var subfieldsClone = MarcDataField.cloneSubfields(subfields);
+assert(subfieldsClone !== subfields
+  && JSON.stringify(subfieldsClone) === JSON.stringify(subfields));
+var subfieldsClone = field.cloneSubfields();
+assert(subfieldsClone !== field.subfields
+  && JSON.stringify(subfieldsClone) === JSON.stringify(field.subfields));
+var subfieldsClone = MarcDataField.cloneSubfields(subfields, {newCode: 'd'});
+console.error(JSON.stringify(subfieldsClone));
+assert(subfieldsClone !== subfields
+  && JSON.stringify(subfieldsClone) !== JSON.stringify(subfields));
+
+/*
  * MarcDataField.assign()
  */
 var field1 = MarcVariableField.parse('111 23$aAAA$bBBB');
