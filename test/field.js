@@ -278,7 +278,6 @@ var subfieldsClone = field.cloneSubfields();
 assert(subfieldsClone !== field.subfields
   && JSON.stringify(subfieldsClone) === JSON.stringify(field.subfields));
 var subfieldsClone = MarcDataField.cloneSubfields(subfields, {newCode: 'd'});
-console.error(JSON.stringify(subfieldsClone));
 assert(subfieldsClone !== subfields
   && JSON.stringify(subfieldsClone) !== JSON.stringify(subfields));
 
