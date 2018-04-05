@@ -438,11 +438,18 @@ assert(record.getLeader() === '12345');
  */
 var record = MarcRecord.parse(
   '222 45$cCCC\n001 ID1\n111 23$bBBB\n111 34$aAAA');
+
 record.sort();
 assert(record.fields[0].tag === '001'
   && record.fields[1].tag === '111' && record.fields[1].ind1 === '2'
   && record.fields[2].tag === '111' && record.fields[2].ind1 === '3'
   && record.fields[3].tag === '222');
+
+record.sort(function (a, b) {
+  return a.tag < b.tag ? 1 : (a.tag > b.tag ? -1 : 0);
+});
+assert(record.fields[0].tag === '222' && record.fields[1].tag === '111'
+  && record.fields[2].tag === '111' && record.fields[3].tag === '001');
 
 /*
  * MarcRecord.walk()

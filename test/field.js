@@ -681,8 +681,15 @@ assert(field.subfields.length === 1 && field.getVariableField('001') === null);
  * MarcDataField.sort()
  */
 var field = MarcVariableField.parse('111 23$cCCC$aAAA$bBBB');
+
 field.sort();
 assert(field.subfields[0].code === 'a' && field.subfields[1].code === 'b');
+
+field.sort(function (a, b) {
+  return a.code < b.code ? 1 : (a.code > b.code ? -1 : 0);
+});
+assert(field.subfields[0].code === 'c' && field.subfields[1].code === 'b'
+  && field.subfields[2].code === 'a');
 
 /*
  * MarcDataField.walk()
