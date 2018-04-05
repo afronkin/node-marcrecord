@@ -351,6 +351,15 @@ field.trim();
 assert(field.subfields.length === 2);
 
 /*
+ * MarcDataField.getSubfieldIndex()
+ */
+var field = MarcVariableField.parse('111 23$aAAA$b$cCCC$d');
+assert(field.getSubfieldIndex(field.subfields[0]) === 0
+  && field.getSubfieldIndex(field.subfields[1]) === 1
+  && field.getSubfieldIndex(field.subfields[2]) === 2
+  && field.getSubfieldIndex(field.subfields[3]) === 3);
+
+/*
  * MarcDataField.getIndicator1()
  * MarcDataField.getIndicator2()
  */
@@ -478,10 +487,9 @@ var field = new MarcDataField('111', '2', '3');
 field.addSubfields([new MarcSubfield('a', 'AAA'), new MarcSubfield('b', 'BBB')]);
 assert(field.subfields.length === 2 && field.subfields[0].data === 'AAA'
   && field.subfields[1].data === 'BBB');
-field.addSubfields(1,
-  [new MarcSubfield('c', 'CCC'), new MarcSubfield('d', 'DDD')]);
-assert(field.subfields.length === 4 && field.subfields[1].data === 'CCC'
-  && field.subfields[2].data === 'DDD');
+field.addSubfields([new MarcSubfield('c', 'CCC'), new MarcSubfield('d', 'DDD')]);
+assert(field.subfields.length === 4 && field.subfields[2].data === 'CCC'
+  && field.subfields[3].data === 'DDD');
 
 /*
  * MarcDataField.addSubfield()
@@ -491,8 +499,8 @@ field.addSubfield(new MarcSubfield('a', 'AAA'));
 assert(field.subfields.length === 1 && field.subfields[0].data === 'AAA');
 field.addSubfield(new MarcSubfield('b', 'BBB'));
 assert(field.subfields.length === 2 && field.subfields[1].data === 'BBB');
-field.addSubfield(0, new MarcSubfield('c', 'CCC'));
-assert(field.subfields.length === 3 && field.subfields[0].data === 'CCC');
+field.addSubfield(new MarcSubfield('c', 'CCC'));
+assert(field.subfields.length === 3 && field.subfields[2].data === 'CCC');
 
 /*
  * MarcDataField.addNonEmptySubfield()
@@ -504,6 +512,53 @@ field.addNonEmptySubfield(new MarcSubfield('b', ''));
 assert(field.subfields.length === 1);
 field.addNonEmptySubfield(new MarcSubfield('c', null));
 assert(field.subfields.length === 1);
+
+/*
+ * MarcDataField.insertSubfields()
+ */
+var field = new MarcDataField('111', '2', '3');
+field.insertSubfields(0, [new MarcSubfield('a', 'A'), new MarcSubfield('b', 'B')]);
+field.insertSubfields(0, [new MarcSubfield('c', 'C'), new MarcSubfield('d', 'D')]);
+field.insertSubfields(1, [new MarcSubfield('e', 'E'), new MarcSubfield('f', 'F')]);
+
+try {
+  field.insertSubfields(-1, [new MarcSubfield('g', 'G'), new MarcSubfield('h', 'H')]);
+} catch (err) {
+}
+try {
+  field.insertSubfields(field.size() + 1, [new MarcSubfield('g', 'G'), new MarcSubfield('h', 'H')]);
+} catch (err) {
+}
+
+assert(field.subfields.length === 6
+  && field.subfields[0].code === 'c'
+  && field.subfields[1].code === 'e'
+  && field.subfields[2].code === 'f'
+  && field.subfields[3].code === 'd'
+  && field.subfields[4].code === 'a'
+  && field.subfields[5].code === 'b');
+
+/*
+ * MarcDataField.insertSubfield()
+ */
+var field = new MarcDataField('111', '2', '3');
+field.insertSubfield(0, new MarcSubfield('a', 'A'));
+field.insertSubfield(0, new MarcSubfield('b', 'B'));
+field.insertSubfield(1, new MarcSubfield('c', 'C'));
+
+try {
+  field.insertSubfield(-1, new MarcSubfield('d', 'D'));
+} catch (err) {
+}
+try {
+  field.insertSubfield(field.size() + 1, new MarcSubfield('d', 'D'));
+} catch (err) {
+}
+
+assert(field.subfields.length === 3
+  && field.subfields[0].code === 'b'
+  && field.subfields[1].code === 'c'
+  && field.subfields[2].code === 'a');
 
 /*
  * MarcDataField.removeSubfields()

@@ -134,12 +134,18 @@ record.trim();
 assert(record.fields.length === 2 && record.fields[1].subfields.length === 2);
 
 /*
+ * MarcRecord.getVariableFieldIndex()
+ */
+var record = MarcRecord.parse('001 ID1\n005 \n111 23$aAAA$b$cCCC$d');
+assert(record.getVariableFieldIndex(record.fields[0]) === 0);
+assert(record.getVariableFieldIndex(record.fields[1]) === 1);
+
+/*
  * MarcRecord.addVariableField()
  */
 var record = new MarcRecord();
 record.addVariableField(new MarcControlField('001', 'ID1'));
-record.addVariableField(
-  new MarcDataField('200', ' ', ' ', [new MarcSubfield('a', 'AAA')]));
+record.addVariableField(new MarcDataField('200', ' ', ' ', [new MarcSubfield('a', 'AAA')]));
 assert(record.fields.length === 2);
 
 /*
@@ -149,10 +155,32 @@ var record = new MarcRecord();
 record.addNonEmptyVariableField(new MarcControlField('001', 'ID1'));
 record.addNonEmptyVariableField(new MarcControlField('005', ''));
 record.addNonEmptyVariableField(new MarcControlField('007', null));
-record.addNonEmptyVariableField(
-  new MarcDataField('200', ' ', ' ', [new MarcSubfield('a', 'AAA')]));
+record.addNonEmptyVariableField(new MarcDataField('200', ' ', ' ', [new MarcSubfield('a', 'AAA')]));
 record.addNonEmptyVariableField(new MarcDataField('200'));
 assert(record.fields.length === 2);
+
+/*
+ * MarcRecord.insertVariableField()
+ */
+var record = new MarcRecord();
+record.insertVariableField(0, new MarcControlField('001', 'ID1'));
+record.insertVariableField(0, new MarcDataField('200', ' ', ' ', [new MarcSubfield('a', 'AAA')]));
+record.insertVariableField(1, new MarcControlField('005', ''));
+record.insertVariableField(record.size(), new MarcControlField('007', null));
+
+try {
+  record.insertVariableField(-1, new MarcControlField('002', '2'));
+} catch (err) {
+}
+try {
+  record.insertVariableField(record.size() + 1, new MarcControlField('002', '2'));
+} catch (err) {
+}
+
+assert(record.fields.length === 4
+  && record.fields[0].tag === '200' && record.fields[1].tag === '005'
+  && record.fields[2].tag === '001' && record.fields[3].tag === '007');
+
 
 /*
  * MarcRecord.removeVariableFields()
