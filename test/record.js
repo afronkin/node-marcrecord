@@ -105,6 +105,29 @@ assert(!record4.equals(record5));
 assert(record4.equals(record5, {ignoreOrder: true}));
 
 /*
+ * MarcRecord.diff()
+ */
+var record1 = MarcRecord.parse('001 ID1\n111 23$aAAA$bBBB');
+var record2 = MarcRecord.parse('111 23$bBBB$aAAA\n001 ID1');
+var record3 = MarcRecord.parse('111 23$bbBb$aAaA\n001 ID1');
+var record4 = MarcRecord.parse('001 ID1\n444 56$1001ID2$110023$xXXX$yYYY');
+var record5 = MarcRecord.parse('444 56$110023$yYYY$xXXX$1001ID2\n001 ID1');
+
+assert(record1.diff(record1) === null);
+assert(record1.diff(record1.clone()) === null);
+
+assert(record1.diff(record2) === 'Field [001 ID1] not found in record2');
+assert(record1.diff(record2, {ignoreOrder: true}) === null);
+
+assert(record2.diff(record3) === 'Field [111 23$bBBB$aAAA] not found in record2');
+assert(record2.diff(record3, {ignoreCase: true}) === null);
+assert(record1.diff(record3, {ignoreOrder: true, ignoreCase: true}) === null);
+
+assert(record4.diff(record4.clone()) === null);
+assert(record4.diff(record5) === 'Field [001 ID1] not found in record2');
+assert(record4.diff(record5, {ignoreOrder: true}) === null);
+
+/*
  * MarcRecord.size()
  */
 var record1 = new MarcRecord();
