@@ -20,18 +20,25 @@ var records = [
 ];
 
 function writeRecords(fileName, marcWriter) {
+  assert(marcWriter.getPosition() === null);
   marcWriter.openSync(fileName, {encoding: encoding});
   for (var i = 0; i < records.length; i++) {
     marcWriter.writeSync(records[i]);
   }
+  assert(marcWriter.getPosition() > 0);
   marcWriter.closeSync();
+  assert(marcWriter.getPosition() === null);
 }
 
 function readRecords(fileName, marcReader) {
   marcReader.openSync(fileName, {encoding: encoding});
+  var firstRecordSize = 0;
   for (var i = 0; record = marcReader.nextSync(); i++) {
+    firstRecordSize = firstRecordSize || marcReader.getPosition();
     assert(record.equals(records[i]));
   }
+  var record = marcReader.readSync(0, firstRecordSize);
+  assert(record.equals(records[0]));
   marcReader.closeSync();
 }
 

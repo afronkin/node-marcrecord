@@ -29,36 +29,52 @@ function writeRecord(marcWriter, recNo, callback) {
 }
 
 function writeRecords(fileName, marcWriter, callback) {
+  assert(marcWriter.getPosition() === null);
   marcWriter.open(fileName, {encoding: 'utf-8'}, function(err) {
     assert(!err);
     writeRecord(marcWriter, 0, function (err) {
       assert(!err);
+      assert(marcWriter.getPosition() > 0);
       marcWriter.close(function (err) {
         assert(!err);
+        assert(marcWriter.getPosition() === null);
         callback(null);
       });
     });
   });
 }
 
-function readRecord(marcReader, recNo, callback) {
-  marcReader.next(function (err, record) {
-    assert(!err && record.equals(records[recNo]));
-    if (recNo + 1 === records.length) {
-      return callback(null);
-    }
-    setImmediate(readRecord, marcReader, recNo + 1, callback);
-  });
-}
-
 function readRecords(fileName, marcReader, callback) {
+  var firstRecordSize = null;
+
+  function readRecord(recNo, callback) {
+    marcReader.next(function (err, record) {
+      assert(!err && record.equals(records[recNo]));
+      if (recNo + 1 === records.length) {
+        return callback(null);
+      }
+      firstRecordSize = firstRecordSize || marcReader.getPosition();
+      setImmediate(readRecord, recNo + 1, callback);
+    });
+  }
+
+  function readRecordAt(recNo, position, size, callback) {
+    marcReader.read(position, size, function (err, record) {
+      assert(!err && record.equals(records[recNo]));
+      return callback(null);
+    });
+  }
+
   marcReader.open(fileName, {encoding: 'utf-8'}, function(err) {
     assert(!err);
-    readRecord(marcReader, 0, function (err) {
+    readRecord(0, function (err) {
       assert(!err);
-      marcReader.close(function (err) {
+      readRecordAt(0, 0, firstRecordSize, function (err) {
         assert(!err);
-        return callback(null);
+        marcReader.close(function (err) {
+          assert(!err);
+          return callback(null);
+        });
       });
     });
   });
