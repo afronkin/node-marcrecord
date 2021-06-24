@@ -616,6 +616,64 @@ assert(field.subfields.length === 6
   && field.subfields[5].code === 'm');
 
 /*
+ * MarcDataField.setSubfield()
+ */
+var field = MarcVariableField.parse('111 23$aA$bB$cC');
+field.setSubfield(new MarcSubfield('c', 'CCC'));
+field.setSubfield(new MarcSubfield('b', 'BBB'));
+field.setSubfield(new MarcSubfield('a', 'AAA'));
+assert(field.subfields.length === 3
+  && field.subfields[0].data === 'AAA'
+  && field.subfields[1].data === 'BBB'
+  && field.subfields[2].data === 'CCC');
+
+var field = MarcVariableField.parse('111 23$aA$bB$aA');
+field.setSubfield(new MarcSubfield('a', 'AAA'));
+assert(field.subfields.length === 2
+  && field.subfields[0].data === 'AAA'
+  && field.subfields[1].data === 'B');
+
+var field = MarcVariableField.parse('111 23$bB$cC');
+field.setSubfield(new MarcSubfield('a', 'AAA'));
+assert(field.subfields.length === 3
+  && field.subfields[0].data === 'B'
+  && field.subfields[1].data === 'C'
+  && field.subfields[2].data === 'AAA');
+
+var field = new MarcDataField('111', '2', '3');
+field.setSubfield(new MarcSubfield('a', 'A'));
+assert(field.subfields.length === 1 && field.subfields[0].data === 'A');
+field.setSubfield(new MarcSubfield('a', 'AAA'));
+assert(field.subfields.length === 1 && field.subfields[0].data === 'AAA');
+
+var field = MarcVariableField.parse('111 23$aA$bB$aA');
+field.setSubfield(new MarcSubfield('a', 'AAA'), {replace: 'first'});
+field.setSubfield(new MarcSubfield('a', 'AA'), {replace: 'last'});
+assert(field.subfields.length === 3
+  && field.subfields[0].data === 'AAA'
+  && field.subfields[1].data === 'B'
+  && field.subfields[2].data === 'AA');
+
+var field = MarcVariableField.parse('111 23$aA$bB$aA');
+field.setSubfield(new MarcSubfield('a', 'AAA'), {replace: 'all'});
+assert(field.subfields.length === 2
+  && field.subfields[0].data === 'AAA'
+  && field.subfields[1].data === 'B');
+
+var field = MarcVariableField.parse('111 23$aA$bB$aA');
+field.setSubfield(new MarcSubfield('a', 'AAA'), {replace: true});
+assert(field.subfields.length === 2
+  && field.subfields[0].data === 'AAA'
+  && field.subfields[1].data === 'B');
+
+var field = new MarcDataField('111', '2', '3');
+var subfield = new MarcSubfield('a', 'A');
+field.setSubfield(subfield);
+assert(field.subfields.length === 1 && field.subfields[0].data === 'A');
+subfield.data = 'AAA';
+assert(field.subfields.length === 1 && field.subfields[0].data === 'AAA');
+    
+/*
  * MarcDataField.removeSubfields()
  */
 var field = MarcVariableField.parse('111 23$aAAA$bBBB$cCCC');
