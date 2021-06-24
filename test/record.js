@@ -228,6 +228,20 @@ record.removeVariableField(record.fields[0]);
 assert(record.fields.length === 0);
 
 /*
+ * MarcRecord.setSubfield()
+ */
+var record = MarcRecord.parse('001 ID1\n111 23$aA$bB\n222 34$cC$dD');
+record.setSubfield('111', new MarcSubfield('a', 'AAA'));
+assert(record.getSubfieldData('111', 'a') === 'AAA');
+record.setSubfield('222', new MarcSubfield('d', 'DDD'));
+assert(record.getSubfieldData('222', 'd') === 'DDD');
+try {
+  record.setSubfield('333', new MarcSubfield('a', 'AAA'));
+  assert(false);
+} catch (err) {
+}
+
+/*
  * MarcRecord.getVariableFields()
  */
 var record = MarcRecord.parse(
