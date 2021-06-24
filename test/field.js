@@ -561,6 +561,61 @@ assert(field.subfields.length === 3
   && field.subfields[2].code === 'a');
 
 /*
+ * MarcDataField.insertSubfieldsAfter()
+ */
+var field = new MarcDataField('111', '2', '3');
+field.insertSubfieldsAfter('q', [new MarcSubfield('v', 'V'), new MarcSubfield('w', 'W')]);
+field.insertSubfieldsAfter('q', [new MarcSubfield('a', 'A'), new MarcSubfield('d', 'D')], {defaultPosition: 'begin'});
+field.insertSubfieldsAfter('q', [new MarcSubfield('g', 'G'), new MarcSubfield('h', 'H')], {defaultPosition: 'end'});
+field.insertSubfieldsAfter('a', [new MarcSubfield('b', 'B'), new MarcSubfield('c', 'C')]);
+field.insertSubfieldsAfter(['d', 'q'], [new MarcSubfield('e', 'E'), new MarcSubfield('f', 'F')]);
+field.insertSubfieldsAfter(['p', 'q'], [new MarcSubfield('i', 'I'), new MarcSubfield('j', 'J')],
+  {defaultPosition: 'end'});
+field.insertSubfieldsAfter(null, [new MarcSubfield('p', 'P'), new MarcSubfield('q', 'Q')]);
+field.insertSubfieldsAfter(null, [new MarcSubfield('k', 'K'), new MarcSubfield('l', 'L')], {defaultPosition: 'end'});
+field.insertSubfieldsAfter([], [new MarcSubfield('p', 'P'), new MarcSubfield('q', 'Q')]);
+field.insertSubfieldsAfter([], [new MarcSubfield('m', 'M'), new MarcSubfield('n', 'N')], {defaultPosition: 'end'});
+
+assert(field.subfields.length === 14
+  && field.subfields[0].code === 'a'
+  && field.subfields[1].code === 'b'
+  && field.subfields[2].code === 'c'
+  && field.subfields[3].code === 'd'
+  && field.subfields[4].code === 'e'
+  && field.subfields[5].code === 'f'
+  && field.subfields[6].code === 'g'
+  && field.subfields[7].code === 'h'
+  && field.subfields[8].code === 'i'
+  && field.subfields[9].code === 'j'
+  && field.subfields[10].code === 'k'
+  && field.subfields[11].code === 'l'
+  && field.subfields[12].code === 'm'
+  && field.subfields[13].code === 'n');
+
+/*
+ * MarcDataField.insertSubfieldAfter()
+ */
+var field = new MarcDataField('111', '2', '3');
+field.insertSubfieldAfter('q', new MarcSubfield('v', 'V'));
+field.insertSubfieldAfter('q', new MarcSubfield('a', 'A'), {defaultPosition: 'begin'});
+field.insertSubfieldAfter('q', new MarcSubfield('g', 'G'), {defaultPosition: 'end'});
+field.insertSubfieldAfter('a', new MarcSubfield('b', 'B'));
+field.insertSubfieldAfter(['d', 'q'], new MarcSubfield('e', 'E'));
+field.insertSubfieldAfter(['p', 'q'], new MarcSubfield('i', 'I'), {defaultPosition: 'end'});
+field.insertSubfieldAfter(null, new MarcSubfield('p', 'P'));
+field.insertSubfieldAfter(null, new MarcSubfield('k', 'K'), {defaultPosition: 'end'});
+field.insertSubfieldAfter([], new MarcSubfield('p', 'P'));
+field.insertSubfieldAfter([], new MarcSubfield('m', 'M'), {defaultPosition: 'end'});
+
+assert(field.subfields.length === 6
+  && field.subfields[0].code === 'a'
+  && field.subfields[1].code === 'b'
+  && field.subfields[2].code === 'g'
+  && field.subfields[3].code === 'i'
+  && field.subfields[4].code === 'k'
+  && field.subfields[5].code === 'm');
+
+/*
  * MarcDataField.removeSubfields()
  */
 var field = MarcVariableField.parse('111 23$aAAA$bBBB$cCCC');
