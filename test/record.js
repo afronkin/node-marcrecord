@@ -286,6 +286,20 @@ assert(record.getControlFields([/^005/, '001', /^0/]).length === 2);
 assert(record.getControlFields(['007', /^008/]).length === 0);
 
 /*
+ * MarcRecord.getControlField()
+ */
+var record = MarcRecord.parse('001 ID1\n005 20160101102030.1\n111 23$aAAA');
+assert(record.getControlField().tag === '001');
+assert(record.getControlField('001').tag === '001');
+assert(record.getControlField('007') === null);
+assert(record.getControlField('111') === null);
+assert(record.getControlField(/^0../).tag === '001');
+assert(record.getControlField(/^007/) === null);
+assert(record.getControlField(['005', '001']).tag === '001');
+assert(record.getControlField([/^005/, '001', /^0/]).tag === '001');
+assert(record.getControlField(['007', /^008/]) === null);
+
+/*
  * MarcRecord.getDataFields()
  */
 var record = MarcRecord.parse(
@@ -310,6 +324,31 @@ assert(record.getDataFields('234', '#', '1').length === 1);
 assert(record.getDataFields('234', ' ', '1').length === 0);
 assert(record.getDataFields('234', ' ', '1',
   {normalizeIndicators: true}).length === 1);
+
+/*
+ * MarcRecord.getDataField()
+ */
+var record = MarcRecord.parse(
+  '001 ID1\n111 23$aAAA$bBBB\n111 23$cCCC$dDDD\n122 34$eEEE$fFFF\n234 #1$xX');
+
+assert(record.getDataField().tag === '111');
+assert(record.getDataField('111').tag === '111');
+assert(record.getDataField('333') === null);
+assert(record.getDataField('001') === null);
+assert(record.getDataField(/^1..$/).tag === '111');
+assert(record.getDataField(/^3..$/) === null);
+assert(record.getDataField(['122', '001']).tag === '122');
+assert(record.getDataField([/^1/, '001', /^0/]).tag === '111');
+assert(record.getDataField(['007', /^3/]) === null);
+
+assert(record.getDataField('122', '3').tag === '122');
+assert(record.getDataField('122', '3', '4').tag === '122');
+assert(record.getDataField('122', '1', '1') === null);
+assert(record.getDataField(/^1../, '2', '3').tag === '111');
+
+assert(record.getDataField('234', '#', '1').tag === '234');
+assert(record.getDataField('234', ' ', '1') === null);
+assert(record.getDataField('234', ' ', '1', {normalizeIndicators: true}).tag === '234');
 
 /*
  * MarcRecord.getControlFieldData()
