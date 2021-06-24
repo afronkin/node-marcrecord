@@ -231,9 +231,9 @@ assert(record.fields.length === 0);
  * MarcRecord.setSubfield()
  */
 var record = MarcRecord.parse('001 ID1\n111 23$aA$bB\n222 34$cC$dD');
-record.setSubfield('111', new MarcSubfield('a', 'AAA'));
+record.setSubfield('111', null, null, new MarcSubfield('a', 'AAA'));
 assert(record.getSubfieldData('111', 'a') === 'AAA');
-record.setSubfield('222', new MarcSubfield('d', 'DDD'));
+record.setSubfield('222', '3', '4', new MarcSubfield('d', 'DDD'));
 assert(record.getSubfieldData('222', 'd') === 'DDD');
 try {
   record.setSubfield('333', new MarcSubfield('a', 'AAA'));
