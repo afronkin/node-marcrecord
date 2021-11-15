@@ -793,16 +793,19 @@ assert(field.subfields.length === 1 && field.getVariableField('001') === null);
 /*
  * MarcDataField.sort()
  */
-var field = MarcVariableField.parse('111 23$cCCC$aAAA$bBBB');
+var field = MarcVariableField.parse('111 23$cCCC$aAAA$2222$bBBB');
 
 field.sort();
-assert(field.subfields[0].code === 'a' && field.subfields[1].code === 'b');
+assert(field.subfields[0].code === 'a' && field.subfields[1].code === 'b' && field.subfields[2].code === 'c' && field.subfields[3].code === '2');
+
+field.sort({numericCodesFirst: true});
+assert(field.subfields[0].code === '2' && field.subfields[1].code === 'a' && field.subfields[2].code === 'b' && field.subfields[3].code === 'c');
 
 field.sort(function (a, b) {
   return a.code < b.code ? 1 : (a.code > b.code ? -1 : 0);
 });
 assert(field.subfields[0].code === 'c' && field.subfields[1].code === 'b'
-  && field.subfields[2].code === 'a');
+  && field.subfields[2].code === 'a' && field.subfields[3].code === '2');
 
 /*
  * MarcDataField.walk()
