@@ -378,6 +378,18 @@ field.setIndicator2('3');
 assert(field.ind2 === '3');
 
 /*
+ * MarcDataField.hasSubfield()
+ */
+var field = MarcVariableField.parse('111 23$aAAA$bBBB$cCCC');
+assert(field.hasSubfield() === true);
+assert(field.hasSubfield('b') === true);
+assert(field.hasSubfield('z') === false);
+assert(field.hasSubfield(['z', 'b', 'c']) === true);
+
+var field = MarcVariableField.parse('444 56$1001ID2$110023$xXXX$yYYY');
+assert(field.hasSubfield('1') === true);
+
+/*
  * MarcDataField.getSubfields()
  */
 var field = MarcVariableField.parse('111 23$aAAA$bBBB$cCCC');
